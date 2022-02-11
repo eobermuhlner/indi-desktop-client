@@ -4,6 +4,7 @@ import ch.obermuhlner.kotlin.javafx.*
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.Node
@@ -37,14 +38,17 @@ class IndiClientApplication : Application() {
 
     private fun createMainNode(): Node {
         val hostProperty = SimpleStringProperty("192.168.0.222")
+        val portProperty = SimpleIntegerProperty(7624)
         return vbox(SPACING) {
             children += hbox(SPACING) {
                 children += label("Host:")
                 children += textfield(hostProperty) {
                 }
+                children += textfield(portProperty) {
+                }
                 children += button("Connect") {
                     onAction = EventHandler {
-                        connectIndi(hostProperty.get())
+                        connectIndi(hostProperty.get(), portProperty.get())
                     }
                 }
             }
