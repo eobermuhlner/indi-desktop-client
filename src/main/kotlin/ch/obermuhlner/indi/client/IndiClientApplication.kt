@@ -12,8 +12,6 @@ import javafx.scene.Scene
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import javafx.event.EventHandler
-import javafx.scene.control.Label
-import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import org.indilib.i4j.Constants
@@ -21,8 +19,8 @@ import org.indilib.i4j.client.*
 import java.util.*
 
 class IndiClientApplication : Application() {
-    var devicesTabPane = tabpane {}
-    private val mapDeviceToVbox = mutableMapOf<INDIDevice, VBox>()
+    private var devicesTabPane = tabpane {}
+    private val mapDeviceToUserInterface = mutableMapOf<INDIDevice, GridPaneContext>()
 
     override fun start(primaryStage: Stage) {
         val root = VBox()
@@ -87,9 +85,7 @@ class IndiClientApplication : Application() {
         device.addINDIDeviceListener(object : INDIDeviceListener {
             override fun newProperty(device: INDIDevice, property: INDIProperty<*>) {
                 Platform.runLater {
-                    mapDeviceToVbox[device]!!.children += vbox(SPACING) {
-                        children += createPropertyEditor(device, property)
-                    }
+                    addPropertyEditor(device, property, mapDeviceToUserInterface[device]!!)
                 }
             }
 
@@ -97,148 +93,202 @@ class IndiClientApplication : Application() {
             }
 
             override fun messageChanged(device: INDIDevice) {
+                println(device.lastMessage)
             }
         })
 
         Platform.runLater {
-            val devicePropertiesBox = vbox(SPACING) {
-                children += label(device.name)
+            val deviceGridPane = gridpane {
+                hgap = SPACING
+                vgap = ROW_SPACING
             }
 
             devicesTabPane.tabs += tab(device.name) {
                 content = scrollpane {
-                    content = devicePropertiesBox
+                    content = vbox(SPACING) {
+                        children += deviceGridPane
+                    }
                 }
             }
 
-            mapDeviceToVbox[device] = devicePropertiesBox
+            mapDeviceToUserInterface[device] = deviceGridPane
         }
     }
 
-    private fun createPropertyEditor(device: INDIDevice, property: INDIProperty<*>): Node {
+    private fun addPropertyEditor(device: INDIDevice, property: INDIProperty<*>, gridPaneContext: GridPaneContext) {
         return when (property) {
-            is INDINumberProperty -> createNumberPropertyEditor(property)
-            is INDITextProperty -> createTextPropertyEditor(property)
-            is INDISwitchProperty -> createSwitchPropertyEditor(property)
-            is INDILightProperty -> createLightPropertyEditor(property)
-            is INDIBLOBProperty -> createBlobPropertyEditor(property)
-            else -> label(property.nameStateAndValuesAsString)
+            is INDINumberProperty -> addNumberPropertyEditor(property, gridPaneContext)
+            is INDITextProperty -> addTextPropertyEditor(property, gridPaneContext)
+            is INDISwitchProperty -> addSwitchPropertyEditor(property, gridPaneContext)
+            is INDILightProperty -> addLightPropertyEditor(property, gridPaneContext)
+            is INDIBLOBProperty -> addBlobPropertyEditor(property, gridPaneContext)
+            else -> addGenericPropertyEditor(property, gridPaneContext)
         }
     }
 
-    private fun createNumberPropertyEditor(property: INDINumberProperty): Node {
-        return vbox(SPACING) {
-            children += propertyNameState(property)
+    private fun addNumberPropertyEditor(property: INDINumberProperty, gridPaneContext: GridPaneContext) {
+        addPopertyNameState(property, gridPaneContext)
 
-            for (element in property.elementsAsList) {
-                val stringProperty = SimpleStringProperty(element.valueAsString)
-                val editStringProperty = SimpleStringProperty(element.valueAsString)
-                val editable = property.permission != Constants.PropertyPermissions.RO
-                children += hbox(SPACING) {
-                    children += label(element.name)
-                    children += textfield(stringProperty) {
+        for (element in property.elementsAsList) {
+            val stringProperty = SimpleStringProperty(element.valueAsString)
+            val editStringProperty = SimpleStringProperty(element.valueAsString)
+            val editable = property.permission != Constants.PropertyPermissions.RO
+            gridPaneContext.row {
+                cell {
+                    label("")
+                }
+                cell {
+                    label(element.name)
+                }
+                cell {
+                    textfield(stringProperty) {
                         isDisable = true
                     }
-                    if (editable) {
-                        children += textfield(editStringProperty) {
-                        }
-                        children += button("Set") {
-                            onAction = EventHandler {
-                                element.setDesiredValue(editStringProperty.value)
-                                property.sendChangesToDriver()
+                }
+                if (editable) {
+                    cell {
+                        hbox(SPACING) {
+                            children += textfield(editStringProperty) {
+                            }
+                            children += button("Set") {
+                                onAction = EventHandler {
+                                    element.setDesiredValue(editStringProperty.value)
+                                    property.sendChangesToDriver()
+                                }
                             }
                         }
                     }
                 }
-                element.addINDIElementListener {
-                    stringProperty.value = it.valueAsString
-                }
+            }
+            element.addINDIElementListener {
+                stringProperty.value = it.valueAsString
             }
         }
     }
 
-    private fun createTextPropertyEditor(property: INDITextProperty): Node {
-        return vbox(SPACING) {
-            children += propertyNameState(property)
+    private fun addTextPropertyEditor(property: INDITextProperty, gridPaneContext: GridPaneContext) {
+        addPopertyNameState(property, gridPaneContext)
 
-            for (element in property.elementsAsList) {
-                val stringProperty = SimpleStringProperty(element.value)
-                val editStringProperty = SimpleStringProperty(element.valueAsString)
-                val editable = property.permission != Constants.PropertyPermissions.RO
-                children += hbox(SPACING) {
-                    children += label(element.name)
-                    children += textfield(stringProperty) {
+        for (element in property.elementsAsList) {
+            val stringProperty = SimpleStringProperty(element.valueAsString)
+            val editStringProperty = SimpleStringProperty(element.valueAsString)
+            val editable = property.permission != Constants.PropertyPermissions.RO
+            gridPaneContext.row {
+                cell {
+                    label("")
+                }
+                cell {
+                    label(element.name)
+                }
+                cell {
+                    textfield(stringProperty) {
                         isDisable = true
                     }
-                    if (editable) {
-                        children += textfield(editStringProperty) {
-                        }
-                        children += button("Set") {
-                            onAction = EventHandler {
-                                element.desiredValue = editStringProperty.value
-                                property.sendChangesToDriver()
+                }
+                if (editable) {
+                    cell {
+                        hbox(SPACING) {
+                            children += textfield(editStringProperty) {
+                            }
+                            children += button("Set") {
+                                onAction = EventHandler {
+                                    element.desiredValue = editStringProperty.value
+                                    property.sendChangesToDriver()
+                                }
                             }
                         }
                     }
                 }
-                element.addINDIElementListener {
-                    stringProperty.value = it.valueAsString
+            }
+            element.addINDIElementListener {
+                stringProperty.value = it.valueAsString
+            }
+        }
+    }
+
+    private fun addSwitchPropertyEditor(property: INDISwitchProperty, gridPaneContext: GridPaneContext) {
+        addPopertyNameState(property, gridPaneContext)
+
+        gridPaneContext.row {
+            cell {
+                label("")
+            }
+            cell(colspan = 3) {
+                hbox(SPACING) {
+                    for (element in property.elementsAsList) {
+                        val booleanProperty = SimpleBooleanProperty(element.value == Constants.SwitchStatus.ON)
+                        children += togglebutton(element.name) {
+                            selectedProperty().bindBidirectional(booleanProperty)
+                            isDisable = property.permission == Constants.PropertyPermissions.RO
+                        }
+                        booleanProperty.addListener { _, _, value ->
+                            element.desiredValue = if (value) Constants.SwitchStatus.ON else Constants.SwitchStatus.OFF
+                            property.sendChangesToDriver()
+                        }
+                        element.addINDIElementListener {
+                            booleanProperty.value = it.value == Constants.SwitchStatus.ON
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun createSwitchPropertyEditor(property: INDISwitchProperty): Node {
-        return hbox(SPACING) {
-            children += propertyNameState(property)
+    private fun addLightPropertyEditor(property: INDILightProperty, gridPaneContext: GridPaneContext) {
+        addPopertyNameState(property, gridPaneContext)
 
-            for (element in property.elementsAsList) {
-                val booleanProperty = SimpleBooleanProperty(element.value == Constants.SwitchStatus.ON)
-                children += togglebutton(element.name) {
-                    selectedProperty().bindBidirectional(booleanProperty)
-                    isDisable = property.permission == Constants.PropertyPermissions.RO
-                }
-                booleanProperty.addListener { _, _, value ->
-                    element.desiredValue = if (value) Constants.SwitchStatus.ON else Constants.SwitchStatus.OFF
-                    property.sendChangesToDriver()
-                }
-                element.addINDIElementListener {
-                    booleanProperty.value = it.value == Constants.SwitchStatus.ON
+        gridPaneContext.row {
+            cell {
+                label("")
+            }
+            cell(colspan = 3) {
+                hbox(SPACING) {
+                    for (element in property.elementsAsList) {
+                        children += button(element.name) {
+                            styleClass += "light_" + element.value.name.lowercase()
+                            isDisable = true
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun createLightPropertyEditor(property: INDILightProperty): Node {
-        return hbox(SPACING) {
-            children += propertyNameState(property)
+    private fun addBlobPropertyEditor(property: INDIBLOBProperty, gridPaneContext: GridPaneContext) {
+        addPopertyNameState(property, gridPaneContext)
 
-            for (element in property.elementsAsList) {
-                children += button(element.name) {
-                    styleClass += "light_" + element.value.name.lowercase()
-                    isDisable = true
-                }
+        gridPaneContext.row {
+            cell(colspan = 3) {
+                label(property.nameStateAndValuesAsString)
             }
         }
     }
 
-    private fun createBlobPropertyEditor(property: INDIBLOBProperty): Node {
-        return label(property.nameStateAndValuesAsString)
+    private fun addGenericPropertyEditor(property: INDIProperty<*>, gridPaneContext: GridPaneContext) {
+        addPopertyNameState(property, gridPaneContext)
+
+        gridPaneContext.row {
+            cell(colspan = 3) {
+                label(property.nameStateAndValuesAsString)
+            }
+        }
     }
 
-    private fun propertyNameState(property: INDIProperty<*>): Node {
+    private fun addPopertyNameState(property: INDIProperty<*>, gridPaneContext: GridPaneContext) {
         val stateProperty = SimpleObjectProperty(property.state)
-        val node = hbox {
-            children += stateLight(stateProperty) {
-                fill = toColor(property.state)
+        gridPaneContext.row {
+            cell {
+                stateLight(stateProperty) {
+                    fill = toColor(property.state)
+                }            }
+            cell(colspan = 3) {
+                label(property.name)
             }
-            children += label(property.name)
         }
+
         property.addINDIPropertyListener {
             stateProperty.value = it.state
         }
-
-        return node
     }
 
     private fun stateLight(stateProperty: SimpleObjectProperty<Constants.PropertyStates>, initializer: Circle.() -> Unit): Circle {
@@ -259,6 +309,7 @@ class IndiClientApplication : Application() {
 
     companion object {
         private const val SPACING = 4.0
+        private const val ROW_SPACING = 6.0
         private const val LED_RADIUS = SPACING * 2
 
         @JvmStatic

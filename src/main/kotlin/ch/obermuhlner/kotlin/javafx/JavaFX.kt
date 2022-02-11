@@ -233,7 +233,7 @@ fun tab(name: String, initializer: Tab.() -> Unit)
         = Tab(name).apply(initializer)
 
 
-fun gridpane(initializer: GridPaneContext.() -> Unit): GridPane
+fun gridpane(initializer: GridPaneContext.() -> Unit): GridPaneContext
         = GridPaneContext().apply(initializer)
 
 class GridPaneContext : GridPane() {
@@ -251,8 +251,9 @@ class RowContext(private val gridPane: GridPane, private val rowIndex: Int) {
         gridPane.add(creator.invoke(), colIndex++, rowIndex)
     }
 
-    fun <T: Node> cell(colspan: Int, rowspan: Int, creator: () -> T) {
-        gridPane.add(creator.invoke(), colIndex++, rowIndex, colspan, rowspan)
+    fun <T: Node> cell(colspan: Int=1, rowspan: Int=1, creator: () -> T) {
+        gridPane.add(creator.invoke(), colIndex, rowIndex, colspan, rowspan)
+        colIndex += colspan
     }
 
 }
