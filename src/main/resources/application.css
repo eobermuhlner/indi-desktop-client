@@ -1,0 +1,32 @@
+
+.header1 {
+    -fx-font-size: 16px;
+}
+
+.header2 {
+    -fx-font-size: 14px;
+}
+
+.tooltip {
+     -fx-background-radius: 0 0 0 0;
+     -fx-background-color: whitesmoke;
+     -fx-border-color: darkgray;
+     -fx-text-fill: black;
+}
+
+.light_idle {
+    -fx-background-color: gray;
+}
+
+.light_ok {
+    -fx-background-color: green;
+}
+
+.light_busy {
+    -fx-background-color: yellow;
+}
+
+.light_alert {
+    -fx-background-color: red;
+}
+
