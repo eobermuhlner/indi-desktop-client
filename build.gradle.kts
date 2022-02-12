@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     implementation("com.github.INDIForJava:INDIForJava-client:2.1.1")
+    implementation("gov.nasa.gsfc.heasarc:nom-tam-fits:1.15.2")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("ch.qos.logback:logback-core:1.2.3")
 

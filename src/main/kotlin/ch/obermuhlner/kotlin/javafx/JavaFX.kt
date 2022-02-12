@@ -11,10 +11,7 @@ import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.HBox
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import javafx.scene.shape.Circle
 import javafx.scene.shape.Rectangle
 import javafx.util.converter.DoubleStringConverter
@@ -44,6 +41,26 @@ fun vbox(spacing: Double, initializer: VBox.() -> Unit)
         = VBox(spacing).apply(initializer)
 
 
+fun flowpane(initializer: FlowPane.() -> Unit)
+        = FlowPane().apply(initializer)
+
+fun flowpane(spacing: Double, initializer: FlowPane.() -> Unit)
+        = FlowPane(spacing, spacing).apply(initializer)
+
+fun flowpane(hgap: Double, vgap: Double, initializer: FlowPane.() -> Unit)
+        = FlowPane(hgap, vgap).apply(initializer)
+
+
+fun tilepane(initializer: TilePane.() -> Unit)
+        = TilePane().apply(initializer)
+
+fun tilepane(spacing: Double, initializer: TilePane.() -> Unit)
+        = TilePane(spacing, spacing).apply(initializer)
+
+fun tilepane(hgap: Double, vgap: Double, initializer: TilePane.() -> Unit)
+        = TilePane(hgap, vgap).apply(initializer)
+
+
 fun borderpane(initializer: BorderPane.() -> Unit)
         = BorderPane().apply(initializer)
 
@@ -61,6 +78,29 @@ fun label(text: String)
 fun label(text: String, initializer: Label.() -> Unit)
         = Label(text).apply(initializer)
 
+fun label(textProperty: StringProperty)
+        = label(textProperty) {}
+
+fun label(textProperty: StringProperty, initializer: Label.() -> Unit): Label {
+    val field = label(initializer)
+    field.textProperty().bindBidirectional(textProperty)
+    return field
+}
+
+fun tooltip(initializer: Tooltip.() -> Unit)
+        = Tooltip().apply(initializer)
+
+fun tooltip(text: String, initializer: Tooltip.() -> Unit)
+        = Tooltip(text).apply(initializer)
+
+fun tooltip(textProperty: StringProperty): Tooltip
+        = tooltip(textProperty) {}
+
+fun tooltip(textProperty: StringProperty, initializer: Tooltip.() -> Unit): Tooltip {
+    val field = tooltip(initializer)
+    field.textProperty().bindBidirectional(textProperty)
+    return field
+}
 
 fun button(initializer: Button.() -> Unit)
         = Button().apply(initializer)

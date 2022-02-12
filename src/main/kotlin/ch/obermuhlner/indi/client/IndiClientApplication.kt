@@ -3,24 +3,30 @@ package ch.obermuhlner.indi.client
 import ch.obermuhlner.kotlin.javafx.*
 import javafx.application.Application
 import javafx.application.Platform
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.*
+import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
+import javafx.scene.image.WritableImage
 import javafx.scene.layout.VBox
-import javafx.stage.Stage
-import javafx.event.EventHandler
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
+import javafx.stage.Stage
 import org.indilib.i4j.Constants
 import org.indilib.i4j.client.*
+import java.awt.image.BufferedImage
+import java.io.File
 import java.util.*
+import javax.imageio.ImageIO
+
 
 class IndiClientApplication : Application() {
     private var devicesTabPane = tabpane {}
     private val mapDeviceToUserInterface = mutableMapOf<INDIDevice, GridPaneContext>()
+
+    private var imageCounter: Int = 0
 
     override fun start(primaryStage: Stage) {
         val root = VBox()
@@ -62,6 +68,7 @@ class IndiClientApplication : Application() {
         connection.addINDIServerConnectionListener(object: INDIServerConnectionListener {
             override fun newDevice(connection: INDIServerConnection, device: INDIDevice) {
                 println("newDevice ${device.name}")
+                device.blobsEnable(Constants.BLOBEnables.ALSO)
                 addDeviceTab(device)
             }
 
@@ -82,6 +89,7 @@ class IndiClientApplication : Application() {
     }
 
     private fun addDeviceTab(device: INDIDevice) {
+        val lastMessageProperty = SimpleStringProperty("")
         device.addINDIDeviceListener(object : INDIDeviceListener {
             override fun newProperty(device: INDIDevice, property: INDIProperty<*>) {
                 Platform.runLater {
@@ -93,7 +101,7 @@ class IndiClientApplication : Application() {
             }
 
             override fun messageChanged(device: INDIDevice) {
-                println(device.lastMessage)
+                lastMessageProperty.value = device.lastMessage
             }
         })
 
@@ -104,9 +112,14 @@ class IndiClientApplication : Application() {
             }
 
             devicesTabPane.tabs += tab(device.name) {
-                content = scrollpane {
-                    content = vbox(SPACING) {
-                        children += deviceGridPane
+                content = borderpane {
+                    center = scrollpane {
+                        content = vbox(SPACING) {
+                            children += deviceGridPane
+                        }
+                    }
+                    bottom = textfield(lastMessageProperty) {
+                        isDisable = true
                     }
                 }
             }
@@ -138,7 +151,7 @@ class IndiClientApplication : Application() {
                     label("")
                 }
                 cell {
-                    label(element.name)
+                    label(element.label)
                 }
                 cell {
                     textfield(stringProperty) {
@@ -156,6 +169,7 @@ class IndiClientApplication : Application() {
                                     property.sendChangesToDriver()
                                 }
                             }
+                            children += label("${element.min} - ${element.max}")
                         }
                     }
                 }
@@ -178,7 +192,7 @@ class IndiClientApplication : Application() {
                     label("")
                 }
                 cell {
-                    label(element.name)
+                    label(element.label)
                 }
                 cell {
                     textfield(stringProperty) {
@@ -214,12 +228,14 @@ class IndiClientApplication : Application() {
                 label("")
             }
             cell(colspan = 3) {
-                hbox(SPACING) {
+                flowpane(SPACING) {
                     for (element in property.elementsAsList) {
                         val booleanProperty = SimpleBooleanProperty(element.value == Constants.SwitchStatus.ON)
-                        children += togglebutton(element.name) {
+                        val infoProperty = SimpleStringProperty(element.nameAndValueAsString)
+                        children += togglebutton(element.label) {
                             selectedProperty().bindBidirectional(booleanProperty)
                             isDisable = property.permission == Constants.PropertyPermissions.RO
+                            tooltip = tooltip(infoProperty)
                         }
                         booleanProperty.addListener { _, _, value ->
                             element.desiredValue = if (value) Constants.SwitchStatus.ON else Constants.SwitchStatus.OFF
@@ -227,6 +243,7 @@ class IndiClientApplication : Application() {
                         }
                         element.addINDIElementListener {
                             booleanProperty.value = it.value == Constants.SwitchStatus.ON
+                            infoProperty.value = it.nameAndValueAsString
                         }
                     }
                 }
@@ -242,9 +259,9 @@ class IndiClientApplication : Application() {
                 label("")
             }
             cell(colspan = 3) {
-                hbox(SPACING) {
+                flowpane(SPACING) {
                     for (element in property.elementsAsList) {
-                        children += button(element.name) {
+                        children += button(element.label) {
                             styleClass += "light_" + element.value.name.lowercase()
                             isDisable = true
                         }
@@ -257,11 +274,61 @@ class IndiClientApplication : Application() {
     private fun addBlobPropertyEditor(property: INDIBLOBProperty, gridPaneContext: GridPaneContext) {
         addPopertyNameState(property, gridPaneContext)
 
-        gridPaneContext.row {
-            cell(colspan = 3) {
-                label(property.nameStateAndValuesAsString)
+        for (element in property.elementsAsList) {
+            val blobProperty = SimpleStringProperty(element.valueAsString)
+            val imageProperty = SimpleObjectProperty<Image>()
+            gridPaneContext.row {
+                cell {
+                    label("")
+                }
+                cell {
+                    label(element.label)
+                }
+                cell {
+                    textfield(blobProperty) {
+                        isDisable = true
+                    }
+                }
+                cell {
+                    imageview {
+                        this.imageProperty().bindBidirectional(imageProperty)
+                        fitWidth = 300.0
+                        fitHeight = 300.0
+                        isPreserveRatio = true
+                    }
+                }
+            }
+            element.addINDIElementListener {
+                println("BLOB ELEMENT " + it.nameAndValueAsString)
+                blobProperty.value = it.valueAsString
+                if (it is INDIBLOBElement) {
+                    imageCounter++
+                    val format = if (it.value.format.startsWith(".")) {
+                        it.value.format
+                    } else {
+                        "." + it.value.format
+                    }
+                    val filename = "${property.device.name}_${property.name}_${element.name}_$imageCounter$format"
+                    val file = File(filename)
+                    println("BLOB FILE " + it.value.saveBLOBData(file))
+                    imageProperty.value = toFXImage(ImageIO.read(file))
+                }
             }
         }
+    }
+
+    private fun toFXImage(image: BufferedImage): Image {
+        var wr: WritableImage? = null
+        if (image != null) {
+            wr = WritableImage(image.width, image.height)
+            val pw = wr.pixelWriter
+            for (x in 0 until image.width) {
+                for (y in 0 until image.height) {
+                    pw.setArgb(x, y, image.getRGB(x, y))
+                }
+            }
+        }
+        return ImageView(wr).image
     }
 
     private fun addGenericPropertyEditor(property: INDIProperty<*>, gridPaneContext: GridPaneContext) {
@@ -276,18 +343,22 @@ class IndiClientApplication : Application() {
 
     private fun addPopertyNameState(property: INDIProperty<*>, gridPaneContext: GridPaneContext) {
         val stateProperty = SimpleObjectProperty(property.state)
+        val infoProperty = SimpleStringProperty(property.nameStateAndValuesAsString)
         gridPaneContext.row {
             cell {
                 stateLight(stateProperty) {
                     fill = toColor(property.state)
                 }            }
             cell(colspan = 3) {
-                label(property.name)
+                label(property.label) {
+                    tooltip = tooltip(infoProperty)
+                }
             }
         }
 
         property.addINDIPropertyListener {
             stateProperty.value = it.state
+            infoProperty.value = it.nameStateAndValuesAsString
         }
     }
 
