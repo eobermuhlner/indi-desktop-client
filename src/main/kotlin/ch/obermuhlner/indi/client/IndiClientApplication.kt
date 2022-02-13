@@ -14,10 +14,16 @@ import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.stage.Stage
+import nom.tam.fits.BasicHDU
+import nom.tam.fits.Fits
+import nom.tam.fits.ImageHDU
 import org.indilib.i4j.Constants
 import org.indilib.i4j.client.*
 import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
 import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.imageio.ImageIO
 
@@ -25,8 +31,6 @@ import javax.imageio.ImageIO
 class IndiClientApplication : Application() {
     private var devicesTabPane = tabpane {}
     private val mapDeviceToUserInterface = mutableMapOf<INDIDevice, GridPaneContext>()
-
-    private var imageCounter: Int = 0
 
     override fun start(primaryStage: Stage) {
         val root = VBox()
@@ -284,17 +288,17 @@ class IndiClientApplication : Application() {
                 cell {
                     label(element.label)
                 }
-                cell {
-                    textfield(blobProperty) {
-                        isDisable = true
-                    }
-                }
-                cell {
-                    imageview {
-                        this.imageProperty().bindBidirectional(imageProperty)
-                        fitWidth = 300.0
-                        fitHeight = 300.0
-                        isPreserveRatio = true
+                cell(colspan = 2) {
+                    vbox {
+                        children += textfield(blobProperty) {
+                            isDisable = true
+                        }
+                        children += imageview {
+                            this.imageProperty().bindBidirectional(imageProperty)
+                            fitWidth = 300.0
+                            fitHeight = 300.0
+                            isPreserveRatio = true
+                        }
                     }
                 }
             }
@@ -302,22 +306,78 @@ class IndiClientApplication : Application() {
                 println("BLOB ELEMENT " + it.nameAndValueAsString)
                 blobProperty.value = it.valueAsString
                 if (it is INDIBLOBElement) {
-                    imageCounter++
                     val format = if (it.value.format.startsWith(".")) {
                         it.value.format
                     } else {
                         "." + it.value.format
                     }
-                    val filename = "${property.device.name}_${property.name}_${element.name}_$imageCounter$format"
+                    val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_kkmmss"))
+                    val filename = "${property.device.name}_${property.name}_${element.name}_$timestamp$format"
                     val file = File(filename)
-                    println("BLOB FILE " + it.value.saveBLOBData(file))
-                    imageProperty.value = toFXImage(ImageIO.read(file))
+                    println("BLOB FILE $file")
+                    it.value.saveBLOBData(file)
+                    if (format == ".fits") {
+                        imageProperty.value = fitsToFXImage(it.value.blobData)
+                    } else {
+                        imageProperty.value = toFXImage(ImageIO.read(file))
+                    }
                 }
             }
         }
     }
 
-    private fun toFXImage(image: BufferedImage): Image {
+    private fun fitsToFXImage(data: ByteArray?): Image? {
+        val fits = Fits(ByteArrayInputStream(data))
+        val hdu = fits.getHDU(0)
+        if (hdu is ImageHDU) {
+            when (hdu.axes.size) {
+                2 -> {
+                    val height = hdu.axes[0]
+                    val width = hdu.axes[1]
+
+                    val wr = WritableImage(width, height)
+                    val pw = wr.pixelWriter
+
+                    when (hdu.bitPix) {
+                        BasicHDU.BITPIX_SHORT -> {
+                            val data = hdu.kernel as Array<ShortArray>
+                            for (y in 0 until height) {
+                                for (x in 0 until width) {
+                                    val value = scaleFitsValue(data[y][x].toDouble(), hdu)
+                                    val rgb = toGrayRGB(value)
+                                    pw.setArgb(x, y, rgb)
+                                }
+                            }
+                        }
+                    }
+                    return ImageView(wr).image
+                }
+                3 -> {
+                    val channels = hdu.axes[0]
+                    val height = hdu.axes[1]
+                    val width = hdu.axes[2]
+
+                }
+            }
+        }
+        return null
+    }
+
+    private fun toGrayRGB(value: Double): Int {
+        val v = (value * 256).toInt()
+        val rgb = v shl 24 + v shl 16 + v
+        return rgb
+    }
+
+    private fun scaleFitsValue(value: Double, hdu: BasicHDU<*>): Double {
+        return if (hdu.minimumValue != hdu.maximumValue) {
+            hdu.bZero + (value - hdu.minimumValue) / (hdu.maximumValue - hdu.minimumValue) * hdu.bScale
+        } else {
+            hdu.bZero + value * hdu.bScale
+        }
+    }
+
+    private fun toFXImage(image: BufferedImage?): Image? {
         var wr: WritableImage? = null
         if (image != null) {
             wr = WritableImage(image.width, image.height)
