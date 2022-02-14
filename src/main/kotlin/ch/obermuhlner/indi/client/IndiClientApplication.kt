@@ -45,7 +45,7 @@ class IndiClientApplication : Application() {
     }
 
     private fun createMainNode(): Node {
-        val hostProperty = SimpleStringProperty("192.168.0.222")
+        val hostProperty = SimpleStringProperty("192.168.0.223")
         val portProperty = SimpleIntegerProperty(7624)
         return vbox(SPACING) {
             children += hbox(SPACING) {
@@ -102,6 +102,8 @@ class IndiClientApplication : Application() {
             }
 
             override fun removeProperty(device: INDIDevice, property: INDIProperty<*>) {
+                val gridPaneContext = mapDeviceToUserInterface[device]!!
+                // TODO remove rows
             }
 
             override fun messageChanged(device: INDIDevice) {
@@ -146,9 +148,19 @@ class IndiClientApplication : Application() {
     private fun addNumberPropertyEditor(property: INDINumberProperty, gridPaneContext: GridPaneContext) {
         addPopertyNameState(property, gridPaneContext)
 
+        val elementToEditStringProperties = mutableMapOf<INDINumberElement, StringProperty>()
+
+        fun updateEditedElements() {
+            for (entry in elementToEditStringProperties) {
+                entry.key.setDesiredValue(entry.value.value)
+            }
+            property.sendChangesToDriver()
+        }
+
         for (element in property.elementsAsList) {
             val stringProperty = SimpleStringProperty(element.valueAsString)
             val editStringProperty = SimpleStringProperty(element.valueAsString)
+            elementToEditStringProperties[element] = editStringProperty
             val editable = property.permission != Constants.PropertyPermissions.RO
             gridPaneContext.row {
                 cell {
@@ -164,16 +176,16 @@ class IndiClientApplication : Application() {
                 }
                 if (editable) {
                     cell {
-                        hbox(SPACING) {
-                            children += textfield(editStringProperty) {
-                            }
-                            children += button("Set") {
+                        textfield(editStringProperty) {
+                        }
+                    }
+                    if (element == property.elementsAsList[0]) {
+                        cell(rowspan = property.elementsAsList.size) {
+                            button("Set") {
+                                setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE)
                                 onAction = EventHandler {
-                                    element.setDesiredValue(editStringProperty.value)
-                                    property.sendChangesToDriver()
-                                }
+                                    updateEditedElements()                            }
                             }
-                            children += label("${element.min} - ${element.max}")
                         }
                     }
                 }
@@ -187,10 +199,20 @@ class IndiClientApplication : Application() {
     private fun addTextPropertyEditor(property: INDITextProperty, gridPaneContext: GridPaneContext) {
         addPopertyNameState(property, gridPaneContext)
 
+        val elementToEditStringProperties = mutableMapOf<INDITextElement, StringProperty>()
+
+        fun updateEditedElements() {
+            for (entry in elementToEditStringProperties) {
+                entry.key.setDesiredValue(entry.value.value)
+            }
+            property.sendChangesToDriver()
+        }
+
         for (element in property.elementsAsList) {
             val stringProperty = SimpleStringProperty(element.valueAsString)
             val editStringProperty = SimpleStringProperty(element.valueAsString)
             val editable = property.permission != Constants.PropertyPermissions.RO
+            elementToEditStringProperties[element] = editStringProperty
             gridPaneContext.row {
                 cell {
                     label("")
@@ -205,14 +227,15 @@ class IndiClientApplication : Application() {
                 }
                 if (editable) {
                     cell {
-                        hbox(SPACING) {
-                            children += textfield(editStringProperty) {
-                            }
-                            children += button("Set") {
+                        textfield(editStringProperty) {
+                        }
+                    }
+                    if (element == property.elementsAsList[0]) {
+                        cell(rowspan = property.elementsAsList.size) {
+                            button("Set") {
+                                setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE)
                                 onAction = EventHandler {
-                                    element.desiredValue = editStringProperty.value
-                                    property.sendChangesToDriver()
-                                }
+                                    updateEditedElements()                            }
                             }
                         }
                     }
@@ -306,20 +329,25 @@ class IndiClientApplication : Application() {
                 println("BLOB ELEMENT " + it.nameAndValueAsString)
                 blobProperty.value = it.valueAsString
                 if (it is INDIBLOBElement) {
-                    val format = if (it.value.format.startsWith(".")) {
-                        it.value.format
-                    } else {
-                        "." + it.value.format
-                    }
-                    val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_kkmmss"))
-                    val filename = "${property.device.name}_${property.name}_${element.name}_$timestamp$format"
-                    val file = File(filename)
-                    println("BLOB FILE $file")
-                    it.value.saveBLOBData(file)
-                    if (format == ".fits") {
-                        imageProperty.value = fitsToFXImage(it.value.blobData)
-                    } else {
-                        imageProperty.value = toFXImage(ImageIO.read(file))
+                    Thread().run {
+                        val format = if (it.value.format.startsWith(".")) {
+                            it.value.format
+                        } else {
+                            "." + it.value.format
+                        }
+                        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_kkmmss"))
+                        val filename = "${property.device.name}_${property.name}_${element.name}_$timestamp$format"
+                        val file = File(filename)
+                        println("BLOB FILE $file")
+                        it.value.saveBLOBData(file)
+                        val fxImage = if (format == ".fits") {
+                            fitsToFXImage(it.value.blobData)
+                        } else {
+                            toFXImage(ImageIO.read(file))
+                        }
+                        Platform.runLater {
+                            imageProperty.value = fxImage
+                        }
                     }
                 }
             }
@@ -344,8 +372,8 @@ class IndiClientApplication : Application() {
                             for (y in 0 until height) {
                                 for (x in 0 until width) {
                                     val value = scaleFitsValue(data[y][x].toDouble(), hdu)
-                                    val rgb = toGrayRGB(value)
-                                    pw.setArgb(x, y, rgb)
+                                    val argb = toARGB(value, value, value)
+                                    pw.setArgb(x, y, argb)
                                 }
                             }
                         }
@@ -363,17 +391,27 @@ class IndiClientApplication : Application() {
         return null
     }
 
-    private fun toGrayRGB(value: Double): Int {
-        val v = (value * 256).toInt()
-        val rgb = v shl 24 + v shl 16 + v
-        return rgb
+    private fun toARGB(r: Double, g: Double, b: Double): Int {
+        val aByte = 0xff
+        val rByte = (r * 0xff).toInt()
+        val gByte = (g * 0xff).toInt()
+        val bByte = (b * 0xff).toInt()
+        return  (aByte shl 24) or (rByte shl 16) or (gByte shl 8) or bByte
     }
 
     private fun scaleFitsValue(value: Double, hdu: BasicHDU<*>): Double {
         return if (hdu.minimumValue != hdu.maximumValue) {
             hdu.bZero + (value - hdu.minimumValue) / (hdu.maximumValue - hdu.minimumValue) * hdu.bScale
         } else {
-            hdu.bZero + value * hdu.bScale
+            val value = hdu.bZero + value * hdu.bScale
+            when (hdu.bitPix) {
+                BasicHDU.BITPIX_BYTE -> value / (256.0 - 1)
+                BasicHDU.BITPIX_SHORT -> value / (65536.0 - 1)
+                BasicHDU.BITPIX_INT -> value / (4294967296.0 - 1)
+                BasicHDU.BITPIX_LONG -> value / (18446744073709551616.0 - 1)
+                BasicHDU.BITPIX_FLOAT -> value
+                else -> throw RuntimeException("Unknown bitpix: " + hdu.bitPix)
+            }
         }
     }
 
