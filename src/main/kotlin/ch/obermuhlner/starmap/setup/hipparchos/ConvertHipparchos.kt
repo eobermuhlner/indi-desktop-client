@@ -1,4 +1,4 @@
-package ch.obermuhlner.starmap.hipparchos
+package ch.obermuhlner.starmap.setup.hipparchos
 
 import java.io.*
 

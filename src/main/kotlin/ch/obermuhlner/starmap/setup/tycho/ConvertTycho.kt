@@ -1,6 +1,6 @@
-package ch.obermuhlner.starmap.tycho
+package ch.obermuhlner.starmap.setup.tycho
 
-import ch.obermuhlner.starmap.StarData
+import ch.obermuhlner.starmap.data.StarData
 import java.io.*
 
 /**

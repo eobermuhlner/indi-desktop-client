@@ -1,4 +1,4 @@
-package ch.obermuhlner.starmap
+package ch.obermuhlner.starmap.data
 
 import java.io.*
 import java.io.FileReader as FileReader

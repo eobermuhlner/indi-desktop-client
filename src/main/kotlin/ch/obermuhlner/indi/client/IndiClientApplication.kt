@@ -1,7 +1,7 @@
 package ch.obermuhlner.indi.client
 
 import ch.obermuhlner.kotlin.javafx.*
-import ch.obermuhlner.starmap.StarData
+import ch.obermuhlner.starmap.data.StarData
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.*
@@ -178,8 +178,6 @@ class IndiClientApplication : Application() {
                 val (x1, y1) = stereographicProjectionToXY(
                     starPair.first.ra-centerRa,
                     starPair.first.de-centerDe,
-                    centerRa,
-                    centerDe,
                     projectionRadius)
                 val (x2, y2) = stereographicProjectionToXY(
                     starPair.second.ra-centerRa,
