@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version "1.5.10"
     application
     id("org.openjfx.javafxplugin") version "0.0.10"
+    `maven-publish`
 }
 
 group = "ch.obermuhlner.indi.client"
@@ -24,6 +25,7 @@ repositories {
 
 dependencies {
     implementation("com.github.INDIForJava:INDIForJava-client:2.1.1")
+    //implementation("com.github.eobermuhlner:kimage:main-SNAPSHOT")
     implementation("gov.nasa.gsfc.heasarc:nom-tam-fits:1.15.2")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("ch.qos.logback:logback-core:1.2.3")

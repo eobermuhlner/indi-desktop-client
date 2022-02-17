@@ -1,15 +1,19 @@
 package ch.obermuhlner.indi.client
 
 import ch.obermuhlner.kotlin.javafx.*
+import ch.obermuhlner.starmap.StarData
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.*
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
+import javafx.scene.canvas.Canvas
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.WritableImage
+import javafx.scene.input.MouseEvent
+import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
@@ -22,15 +26,26 @@ import org.indilib.i4j.client.*
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.imageio.ImageIO
+import kotlin.math.*
 
 
 class IndiClientApplication : Application() {
+    private var connection: INDIServerConnection? = null
     private var devicesTabPane = tabpane {}
     private val mapDeviceToUserInterface = mutableMapOf<INDIDevice, GridPaneContext>()
+    private val starMapCanvas = ResizableCanvas()
+    private val hipparcosStars = StarData.readStars(File("hip.jbin"))
+    private val constellations = StarData.readConstellations(hipparcosStars, File("constellations_western.txt"))
+    private val starNames = StarData.readStarNames(hipparcosStars, File("star_names_western.txt"))
+
+    private val centerRaProperty = SimpleDoubleProperty(0.0)
+    private val centerDeProperty = SimpleDoubleProperty(0.0)
+    private val projectionRadiusProperty = SimpleDoubleProperty(200.0)
 
     override fun start(primaryStage: Stage) {
         val root = VBox()
@@ -42,6 +57,13 @@ class IndiClientApplication : Application() {
 
         primaryStage.scene = scene
         primaryStage.show()
+    }
+
+    override fun stop() {
+        connection?.let {
+            it.disconnect()
+        }
+        super.stop()
     }
 
     private fun createMainNode(): Node {
@@ -61,15 +83,205 @@ class IndiClientApplication : Application() {
                 }
             }
 
+            devicesTabPane.tabs += tab("Map") {
+                content = starMapCanvas
+                var startRa: Double? = null
+                var startDe: Double? = null
+                starMapCanvas.onMousePressed = EventHandler { event: MouseEvent ->
+                    val x = event.x - starMapCanvas.width / 2
+                    val y = (starMapCanvas.height - event.y) - starMapCanvas.height / 2
+                    val (ra2, de2) = stereographicProjectionToRaDe(x, y, projectionRadiusProperty.value)
+                    val ra = centerRaProperty.value + ra2
+                    val de = centerDeProperty.value + de2
+                    startRa = ra
+                    startDe = de
+                }
+                starMapCanvas.onMouseDragged = EventHandler { event: MouseEvent ->
+                    val x = event.x - starMapCanvas.width / 2
+                    val y = (starMapCanvas.height - event.y) - starMapCanvas.height / 2
+                    val (ra2, de2) = stereographicProjectionToRaDe(x, y, projectionRadiusProperty.value)
+                    val ra = centerRaProperty.value + ra2
+                    val de = centerDeProperty.value + de2
+                    val localStartRa = startRa
+                    val localStartDe = startDe
+                    if (localStartRa != null && localStartDe != null) {
+                        val deltaRa = localStartRa - ra
+                        val deltaDe = localStartDe - de
+                        centerRaProperty.value = wrap(centerRaProperty.value + deltaRa, 0.0, 2 * Math.PI)
+                        centerDeProperty.value = clamp(centerDeProperty.value + deltaDe, -Math.PI, Math.PI)
+                    } else {
+                        startRa = ra
+                        startDe = de
+                    }
+                }
+                starMapCanvas.onMouseReleased = EventHandler { event: MouseEvent ->
+                    startRa = null
+                    startDe = null
+                }
+
+                starMapCanvas.onScroll = EventHandler { event: ScrollEvent ->
+                    val factor = if (event.deltaY > 0) 1.1 else 0.9
+                    projectionRadiusProperty.value = min(20000.0, max(200.0, projectionRadiusProperty.value * factor))
+                }
+
+                starMapCanvas.widthProperty().addListener { _, _, _ -> drawStars(starMapCanvas) }
+                starMapCanvas.heightProperty().addListener { _, _, _ -> drawStars(starMapCanvas) }
+
+                centerRaProperty.addListener { _, _, _ -> drawStars(starMapCanvas) }
+                centerDeProperty.addListener { _, _, _ -> drawStars(starMapCanvas) }
+                projectionRadiusProperty.addListener { _, _, _ -> drawStars(starMapCanvas) }
+                drawStars(starMapCanvas)
+            }
+
             children += devicesTabPane
         }
     }
 
-    private fun connectIndi(host: String, port: Int = 7624) {
-        val connection = INDIServerConnection(host, port)
-        connection.connect()
+    private fun wrap(value: Double, min: Double, max: Double): Double {
+        return if (value > max) {
+            value - max
+        } else if (value < min) {
+            value + min
+        } else {
+            value
+        }
+    }
 
-        connection.addINDIServerConnectionListener(object: INDIServerConnectionListener {
+    private fun clamp(value: Double, min: Double, max: Double): Double {
+        return if (value < min) {
+            min
+        } else if (value > max) {
+            max
+        } else {
+            value
+        }
+    }
+
+    private fun drawStars(canvas: Canvas) {
+        drawStars(canvas, centerRaProperty.value, centerDeProperty.value, projectionRadiusProperty.value)
+    }
+
+    private fun drawStars(canvas: Canvas, centerRa: Double, centerDe: Double, projectionRadius: Double, limitMagnitude: Double = Math.log10(projectionRadius)+3.0, labelDarkestMagnitude: Double = limitMagnitude+2.0, labelMinProjectionRadius: Double = 1000.0) {
+        val gc = canvas.graphicsContext2D
+        val width = canvas.width
+        val height = canvas.height
+
+        fun toX(x: Double) = x + width/2
+        fun toY(y: Double) = height - (y + height/2)
+
+        gc.fill = Color.BLACK
+        gc.fillRect(0.0, 0.0, width, height)
+
+        gc.stroke = Color.BLUE
+        for (constellation in constellations) {
+            for (starPair in constellation.value) {
+                val (x1, y1) = stereographicProjectionToXY(
+                    starPair.first.ra-centerRa,
+                    starPair.first.de-centerDe,
+                    centerRa,
+                    centerDe,
+                    projectionRadius)
+                val (x2, y2) = stereographicProjectionToXY(
+                    starPair.second.ra-centerRa,
+                    starPair.second.de-centerDe,
+                    projectionRadius)
+                gc.strokeLine(toX(x1), toY(y1), toX(x2), toY(y2))
+            }
+        }
+
+        gc.fill = Color.WHITE
+        for (star in hipparcosStars) {
+            if (star != null) {
+                val (xx, yy) = stereographicProjectionToXY(
+                    star.ra-centerRa,
+                    star.de-centerDe,
+                    projectionRadius
+                )
+
+                val x = toX(xx)
+                val y = toY(yy)
+
+                if (x > 0 && x < width && y > 0 && y < height) {
+                    val radius = -star.magnitude + limitMagnitude
+                    if (radius > 0) {
+                        gc.fillOval(x - radius / 2, y - radius / 2, radius, radius)
+                        if (projectionRadius > labelMinProjectionRadius /*&& star.magnitude < labelDarkestMagnitude*/) {
+                            //gc.strokeText(star.magnitude.toString(), x, y)
+                            val name = starNames[star]
+                            if (name != null) {
+                                gc.strokeText(name, x, y)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // https://mathworld.wolfram.com/StereographicProjection.html
+    private fun stereographicProjectionToXY(
+        ra: Double,
+        de: Double,
+        radius: Double,
+    ): Pair<Double, Double> {
+        val sinDe = sin(de)
+        val cosDe = cos(de)
+        val k = 2 * radius / (1 + cosDe*cos(ra))
+        val x = k * cosDe * sin(ra)
+        val y = k * (sinDe)
+        return Pair(x, y)
+    }
+
+    private fun stereographicProjectionToXY(
+        ra: Double,
+        de: Double,
+        projectionCenterRa: Double,
+        projectionCenterDe: Double,
+        radius: Double,
+        cosProjectionCenterDe: Double = cos(projectionCenterDe),
+        sinProjectionCenterDe: Double = sin(projectionCenterDe)
+    ): Pair<Double, Double> {
+        val sinDe = sin(de)
+        val cosDe = cos(de)
+        val k = 2 * radius / (1 + sinProjectionCenterDe *sinDe + cosProjectionCenterDe *cosDe*cos(ra - projectionCenterRa))
+        val x = k * cosDe * sin(ra - projectionCenterRa)
+        val y = k * (cosProjectionCenterDe * sinDe + sinProjectionCenterDe * cosDe * cos(ra - projectionCenterRa))
+        return Pair(x, y)
+    }
+
+    private fun stereographicProjectionToRaDe(
+        x: Double,
+        y: Double,
+        radius: Double,
+    ): Pair<Double, Double> {
+        val r = sqrt(x*x + y*y)
+        var c = 2 * atan2(r, 2*radius)
+        val de = asin((y * sin(c)) / r )
+        val ra = atan2(x * sin(c), r * cos(c))
+        return Pair(ra, de)
+    }
+
+    private fun stereographicProjectionToRaDe(
+        x: Double,
+        y: Double,
+        centerRa: Double,
+        centerDe: Double,
+        radius: Double,
+        sinCenterDe: Double = sin(centerDe),
+        cosCenterDe: Double = cos(centerDe)
+    ): Pair<Double, Double> {
+        val r = sqrt(x*x + y*y)
+        var c = 2 * atan2(r, 2*radius)
+        val de = asin(cos(c) * sinCenterDe + (y * sin(c) * cosCenterDe) / r )
+        val ra = centerRa + atan2(x * sin(c), r * cosCenterDe * cos(c) - y * sinCenterDe * sin(c))
+        return Pair(ra, de)
+    }
+
+    private fun connectIndi(host: String, port: Int = 7624) {
+        val serverConnection = INDIServerConnection(host, port)
+        serverConnection.connect()
+
+        serverConnection.addINDIServerConnectionListener(object: INDIServerConnectionListener {
             override fun newDevice(connection: INDIServerConnection, device: INDIDevice) {
                 println("newDevice ${device.name}")
                 device.blobsEnable(Constants.BLOBEnables.ALSO)
@@ -89,7 +301,14 @@ class IndiClientApplication : Application() {
             }
         })
 
-        connection.askForDevices()
+        Thread().run {
+            try {
+                serverConnection.askForDevices()
+                connection = serverConnection
+            } catch (ex: IOException) {
+                ex.printStackTrace()
+            }
+        }
     }
 
     private fun addDeviceTab(device: INDIDevice) {
@@ -368,10 +587,10 @@ class IndiClientApplication : Application() {
 
                     when (hdu.bitPix) {
                         BasicHDU.BITPIX_SHORT -> {
-                            val data = hdu.kernel as Array<ShortArray>
+                            val kernel = hdu.kernel as Array<ShortArray>
                             for (y in 0 until height) {
                                 for (x in 0 until width) {
-                                    val value = scaleFitsValue(data[y][x].toDouble(), hdu)
+                                    val value = scaleFitsValue(kernel[y][x].toDouble(), hdu)
                                     val argb = toARGB(value, value, value)
                                     pw.setArgb(x, y, argb)
                                 }
@@ -403,13 +622,13 @@ class IndiClientApplication : Application() {
         return if (hdu.minimumValue != hdu.maximumValue) {
             hdu.bZero + (value - hdu.minimumValue) / (hdu.maximumValue - hdu.minimumValue) * hdu.bScale
         } else {
-            val value = hdu.bZero + value * hdu.bScale
+            val scaledValue = hdu.bZero + value * hdu.bScale
             when (hdu.bitPix) {
-                BasicHDU.BITPIX_BYTE -> value / (256.0 - 1)
-                BasicHDU.BITPIX_SHORT -> value / (65536.0 - 1)
-                BasicHDU.BITPIX_INT -> value / (4294967296.0 - 1)
-                BasicHDU.BITPIX_LONG -> value / (18446744073709551616.0 - 1)
-                BasicHDU.BITPIX_FLOAT -> value
+                BasicHDU.BITPIX_BYTE -> scaledValue / (256.0 - 1)
+                BasicHDU.BITPIX_SHORT -> scaledValue / (65536.0 - 1)
+                BasicHDU.BITPIX_INT -> scaledValue / (4294967296.0 - 1)
+                BasicHDU.BITPIX_LONG -> scaledValue / (18446744073709551616.0 - 1)
+                BasicHDU.BITPIX_FLOAT -> scaledValue
                 else -> throw RuntimeException("Unknown bitpix: " + hdu.bitPix)
             }
         }

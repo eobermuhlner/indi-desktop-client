@@ -1,0 +1,1176 @@
+# star_names_by_constellation
+# Andromeda (And)
+   677, Alpheratz 
+   677, Sirrah 
+  5447, Mirach 
+  9640, Almach 
+  9640, Almaak 
+  9640, Alamak 
+  6411, Adhil 
+  7607, Nembus 
+  7513, Titawin 
+116076, Veritate 
+  6999, Thail 
+ 12191, Buna 
+# Antlia (Ant)
+ 52521, Macondo 
+# Apus (Aps)
+ 76351, Karaka 
+# Aquarius (Aqr)
+109074, Sadalmelik 
+109074, Sadalmelek 
+106278, Sadalsuud 
+106278, Sadalsud 
+110395, Sadachbia 
+110395, Sadalachbia 
+110395, Sadachiba 
+113136, Skat 
+113136, Scheat 
+102618, Albali 
+110003, Ancha 
+111710, Situla 
+110960, Sadaltager 
+110960, Alsad 
+112961, Hydor 
+104459, Albulan_II 
+104459, Albulaan 
+103045, Albulan_I 
+103045, Albulaan 
+106786, Bunda 
+108874, Sadalmulk 
+108874, Al_Sa'd_al_Mulk 
+110672, Seat 
+107251, Bosona 
+110813, Lionrock 
+# Aquila (Aql)
+ 97649, Altair 
+ 97649, Atair 
+ 98036, Alshain 
+ 98036, Alschairn 
+ 97278, Tarazed 
+ 97278, Reda 
+ 97938, Libertas 
+ 93805, Al_Thalimain_Prior 
+ 93805, Al_Thalimain_I 
+ 96468, Al_Thalimain_Posterior 
+ 96468, Al_Thalimain_II 
+ 96468, Althalimain 
+ 93747, Okab 
+ 93747, Deneb_al_Okab_Australis 
+ 93747, Deneb_el_Okab 
+ 93747, Dheneb 
+ 93244, Deneb_al_Okab_Borealis 
+ 93244, Deneb_el_Okab 
+ 95501, Almizan_I 
+ 95501, Deneb_Okab 
+ 97804, Almizan_II 
+ 99473, Almizan_III 
+ 99711, Phoenicia 
+ 99894, Chechia 
+# Ara (Ara)
+ 86796, Cervantes 
+ 84787, Inquill 
+# Aries (Ari)
+  9884, Hamal 
+  8903, Sheratan 
+  8832, Mesarthim 
+  8832, Mesartim 
+ 14838, Botein 
+ 12489, Barani_I 
+ 12719, Barani_II 
+ 13061, Lilii_Borea 
+ 13061, Barani_III 
+ 13209, Bharani 
+ 13209, Nair_al_Butain 
+ 13914, Al_Butain_III 
+ 15110, Al_Butain_IV 
+ 12640, Koleon 
+ 13165, Al_Butain_I 
+ 13702, Al_Butain_II 
+# Auriga (Aur)
+ 24608, Capella 
+ 24608, Alhajoth 
+ 24608, Goat_Star 
+ 28360, Menkalinan 
+ 28360, Menkarlina 
+ 23015, Hassaleh 
+ 23015, Kabalinan 
+ 23453, Saclateni 
+ 23453, Haedus_I 
+ 23453, Haedus 
+ 23453, Sadatoni 
+ 23416, Almaaz 
+ 23416, Al_Ma'az 
+ 23416, Alanz 
+ 23416, Al_Anz 
+ 23767, Haedus 
+ 23767, Haedus_II 
+ 28380, Mahasim 
+ 24813, Alhiba_II 
+ 24340, Alhiba_I 
+ 25292, Alhiba_III 
+ 30520, Dolones_I 
+ 31832, Dolones_III 
+ 31789, Dolones_II 
+ 32173, Dolones_IV 
+ 32480, Dolones_V 
+ 32562, Dolones_VI 
+ 32844, Dolones_VII 
+ 33133, Dolones_VIII 
+ 33377, Dolones_IX 
+ 26712, Andrews' star 
+ 32916, Nervia 
+ 30860, Lucilinburhuc 
+ 28358, Prijipati 
+# Bootes (Boo)
+ 69673, Arcturus 
+ 73555, Nekkar 
+ 71075, Seginus 
+ 71075, Haris 
+ 72105, Izar 
+ 72105, Pulcherrima 
+ 72105, Mirak 
+ 72105, Mirac 
+ 67927, Muphrid 
+ 75411, Alkalurops 
+ 75411, Inkalunis 
+ 75411, Clava 
+ 75411, Venabulum 
+ 72487, Merga 
+ 70497, Asellus_Primus 
+ 69713, Asellus_Secundus 
+ 69713, Asellus_Secondus 
+ 69483, Asellus_Tertius 
+ 74666, Thiba 
+ 69732, Xuange 
+ 69732, Aulad_Althiba 
+ 76534, Ceginus 
+ 73745, Aulad_Alnathlat 
+ 72845, Arcalís 
+ 74961, Nikawiy 
+# Camelopardalis (Cam)
+ 58952, Tonatiuh 
+ 24003, Mago 
+# Cancer (Cnc)
+ 44066, Acubens 
+ 44066, Sertan 
+ 42806, Asellus_Borealis 
+ 42911, Asellus_Australis 
+ 40167, Tegmine 
+ 40167, Tegmeni 
+ 40526, Tarf 
+ 40526, Al_Tarf 
+ 40526, Altarf 
+ 43587, Copernicus 
+ 42556, Meleph 
+ 42556, Almalaf 
+ 43103, Zubanah 
+ 40881, Piautos 
+ 44946, Nahn 
+ 42446, Gakyid 
+# Canes_Venatici (CVn)
+ 63125, Cor_Caroli 
+ 61317, Chara 
+ 61317, Asterion 
+ 62223, La_Superba 
+# Canis_Major (CMa)
+ 32349, Sirius 
+ 32349, Canicula 
+ 32349, Aschere 
+ 30324, Mirzam 
+ 30324, Murzim 
+ 30324, Murzam 
+ 34045, Muliphein 
+ 34045, Mirza 
+ 34045, Isis 
+ 34444, Wezen 
+ 34444, Alwazn 
+ 34444, Al_Wazor 
+ 34444, Wezea 
+ 33579, Adhara 
+ 33579, Adara 
+ 30122, Furud 
+ 30122, Phurad 
+ 35904, Aludra 
+ 33345, Isis 
+ 33152, Udra 
+ 33977, Al_Zara 
+ 33856, Unurgunite 
+ 29550, Amadioha 
+# Canis_Minor (CMi)
+ 37279, Procyon 
+ 37279, Elgomaisa 
+ 37279, Antecanis 
+ 36188, Gomeisa 
+ 36188, Algomeyla 
+ 36188, Gomelza 
+ 36208, Luyten's_Star 
+# Capricornus (Cap)
+100027, Prima_Giedi 
+100027, Gredi 
+100027, Giedi 
+100027, Al_Giedi_Prima 
+100064, Algedi 
+100064, Secunda_Giedi 
+100064, Gredi 
+100064, Giedi 
+100064, Al_Giedi 
+100345, Dabih 
+100345, Dabih_Major 
+100325, Dabih_Minor 
+106985, Nashira 
+107556, Deneb_Algedi 
+107556, Deneb_Algiedi 
+107556, Scheddi 
+107556, Deneb_al_Giedi 
+100310, Alshat 
+100310, Al_Shat 
+105881, Yen 
+# Carina (Car)
+ 30438, Canopus 
+ 30438, Suhel 
+ 45238, Miaplacidus 
+ 41037, Avior 
+ 45556, Aspidiske 
+ 45556, Tureis 
+ 45556, Turais 
+ 45556, Scutulum 
+ 55042, Innes' Star 
+ 38041, Tapecue 
+# Cassiopeia (Cas)
+  3179, Shedar 
+  3179, Shedir 
+   746, Caph 
+   746, Al_Sanam_al_Nakah 
+   746, Chaph 
+  6686, Ruchbah 
+  6686, Ksora 
+  6686, Rucbar 
+  3821, Achird 
+  3821, Marfak 
+  8886, Segin 
+  5542, Marfak 
+  5542, Marfak-East 
+  5336, Marfak 
+  5336, Marfak-West 
+  5336, Al_Marfak 
+  4427, Navi 
+  4427, Cih 
+  2920, Fulu 
+  4422, Castula 
+  1415, Pearce's_Star 
+ 13192, Nushagak 
+# Centaurus (Cen)
+ 71683, Rigil_Kentaurus 
+ 71683, Toliman 
+ 71683, Rigel_Kentaurus 
+ 71683, Bungula 
+ 71681, Toliman 
+ 70890, Proxima 
+ 70890, Proxima_Centauri 
+ 68702, Hadar 
+ 68702, Agena 
+ 61932, Muhlifain 
+ 61932, Menkent 
+ 68002, Alnair 
+ 68002, Baten_Kentaurus 
+ 68002, Al_Nair_al_Kentaurus 
+ 68933, Menkent 
+ 68933, Haratan 
+ 56709, Przybylski's_Star 
+ 70300, Bidelman's_Helium_Variable_Star 
+ 69619, Popper's_Star 
+ 66047, Dofida 
+ 57291, Uklun 
+ 73334, Ke_Kwan 
+# Cepheus (Cep)
+105199, Alderamin 
+106032, Alfirk 
+106032, Alphirk 
+116727, Errai 
+116727, Alrai 
+107259, The_Garnet_Star 
+107259, Erakis 
+108917, Kurhah 
+108917, Al_Kurhah 
+111056, Al_Kalb_al_Rai 
+111056, Kalbalrai 
+107418, Castula 
+110893, Kruger 60 
+102422, Kabalfird 
+101093, Al_Kidr 
+ 99255, Al_Aghnam_I 
+114222, Al_Aghnam_II 
+# Cetus (Cet)
+ 14135, Menkar 
+  3419, Diphda 
+  3419, Deneb_Kaitos 
+  8645, Baten_Kaitos 
+ 10826, Mira 
+ 10826, Mira_Ceti 
+ 12706, Kaffaljidhma 
+ 12706, Al_Kaff_al_Jidhmah 
+ 12706, Kafalgidma 
+ 12706, Alkaffaljidhina 
+  5364, Dheneb 
+  5364, Deneb_Algenubi 
+  1562, Deneb_Kaitos_Shemali 
+  1562, Schemali 
+  1562, Deneb_Kaitos 
+  1562, Baten_Kaitos_Shemali 
+ 13954, Menkar 
+ 13954, Menkab 
+ 12387, Al_Kaff_al_Jidhmah_III 
+ 12390, Sadr_al_Kaitos_III 
+  6537, Al_Naymat_I 
+ 12828, Al_Kaff_al_Jidhmah_IV 
+ 10324, Al_Kaff_al_Jidhmah_I 
+ 11484, Al_Kaff_al_Jidhmah_II 
+ 12770, Sadr_al_Kaitos_IV 
+ 11345, Sadr_al_Kaitos_I 
+ 11783, Sadr_al_Kaitos_II 
+  8102, Al_Naymat_II 
+  9347, Al_Naymat_III 
+  3455, Alnitham_I 
+  3909, Alnitham_II 
+  4371, Alnitham_III 
+  4587, Alnitham_IV 
+  2247, Felixvarela 
+118319, Axólotl 
+# Chamaeleon (Cha)
+ 37284, Ceibo 
+# Columba (Col)
+ 26634, Phact 
+ 26634, Phaet 
+ 26634, Phakt 
+ 26634, Phad 
+ 27628, Wazn 
+ 27628, Wezn 
+ 29034, Elkurud 
+ 29034, Kurud_I 
+ 29807, Kurud_II 
+# Coma_Berenices (Com)
+ 62763, Polaris_Galacticus_Borealis 
+ 64241, Diadem 
+ 64241, Diadema 
+ 61071, Kissin 
+ 60742, Al_Dafirah 
+# Corona_Australis (CrA)
+ 94114, Meridiana 
+ 94114, Alfecca_Meridiana 
+# Corona_Borealis (CrB)
+ 76267, Alphecca 
+ 76267, Gemma 
+ 76267, Alphekka 
+ 76267, Gnosia 
+ 76267, Ashtaroth 
+ 75695, Nusakan 
+ 77442, Variabilis_Coronae 
+ 78322, Blaze_Star 
+ 79219, Kamui 
+# Corvus (Crv)
+ 59199, Alchiba 
+ 59199, Al_Chiba 
+ 59199, Alchita 
+ 59803, Gienah 
+ 59803, Gienah_Corvi 
+ 59803, Gienah_Ghurab 
+ 59803, Minkar 
+ 60965, Algorab 
+ 60965, Algorel 
+ 61359, Kraz 
+ 59316, Minkar 
+# Crater (Crt)
+ 53740, Alkes 
+ 54682, Al_Sharasif 
+ 54682, Al_Sharasif_II 
+ 55106, Abt's_Star 
+ 55174, Hunahpú 
+# Crux (Cru)
+ 60718, Acrux 
+ 62434, Mimosa 
+ 62434, Becrux 
+ 61084, Gacrux 
+ 60260, Ginan 
+ 59747, Imai 
+ 60644, Tupã 
+# Cygnus (Cyg)
+102098, Deneb 
+102098, Arided 
+102098, Aridif 
+102098, Arrioph 
+102098, Deneb_el_Adige 
+102098, Deneb_Cygni 
+ 95947, Albireo 
+100453, Sadr 
+100453, Sadir 
+102488, Aljanah 
+102488, Gienah_Cygni 
+102488, Gienah 
+102488, Al_Janah 
+107136, Azelfafage 
+107136, Azelfage 
+101138, Ruchba 
+101138, Rucba 
+104217, Bessel's_Star 
+104217, Piazzi's_Flying_Star 
+ 96295, Campbell's_Star 
+ 96295, Campbell’s_Hydrogen_Star 
+100044, Revenant_of_the_Swan 
+100044, Permanent_nova 
+ 97165, Fawaris 
+ 97165, Fawaris_II 
+104732, Fawaris_III 
+ 94779, Fawaris_I 
+# Delphinus (Del)
+101958, Sualocin 
+101958, Svalocin 
+101769, Rotanev 
+101769, Venator 
+103527, Musica 
+101421, Aldulfin 
+101421, Deneb_Dulfim 
+102532, Al_Salib 
+102281, Al_Ukud 
+# Draco (Dra)
+ 68756, Thuban 
+ 68756, Adib 
+ 68756, Al_Tinnin 
+ 85670, Rastaban 
+ 85670, Alwaid 
+ 85670, Asuia 
+ 87833, Eltanin 
+ 87833, Etamin 
+ 87833, Taurt 
+ 87833, Rastaban 
+ 87833, Eltamin 
+ 94376, Altais 
+ 94376, Al_Tais 
+ 94376, Nodus_II 
+ 94376, Nodus_Secundus 
+ 94376, Aldib 
+ 94376, Taïs 
+ 75458, Edasich 
+ 75458, Ed_Asich 
+ 75458, Al_Dhihi 
+ 56211, Giausar 
+ 56211, Giansar 
+ 56211, Nodus_Secundus 
+ 83608, Alrakis 
+ 83608, Arrakis 
+ 83608, Errakis 
+ 87585, Grumium 
+ 87585, Genam 
+ 87585, Nodus_I 
+ 87585, Juza 
+ 85819, Kuma 
+ 85829, Kuma 
+ 97433, Tyl 
+ 96100, Alsafi 
+ 86614, Dziban 
+ 86614, Dziban_I 
+ 86620, Dziban_II 
+ 86620, Dsiban 
+ 86201, Al_Dhih 
+ 86201, Adfar_Aldib_II 
+ 86782, Alruba 
+ 90344, Fafnir 
+ 83895, Aldhibah 
+ 83895, Al_Dhibain_Posterior 
+ 83895, Dhibah 
+ 83895, Nodus_I 
+ 80331, Athebyne 
+ 80331, Al_Dhibain_Prior 
+ 80331, Dhibain 
+ 80331, Aldhibain 
+ 85805, Adfar_Aldib_I 
+ 95081, Tais_I 
+ 98702, Tais_II 
+ 94648, Athafi_II 
+ 92782, Athafi_I 
+ 89908, Aldhiba 
+ 89937, Alahakan 
+ 63076, Taiyi 
+ 62423, Tianyi 
+ 61177, Funi 
+# Equuleus (Equ)
+104987, Kitalpha 
+# Eridanus (Eri)
+  7588, Achernar 
+ 23875, Cursa 
+ 23875, Dhalim 
+ 23875, Kursa 
+ 18543, Zaurak 
+ 15197, Zibal 
+ 13701, Azha 
+ 13847, Acamar 
+ 13847, Dalim 
+ 19587, Beid 
+ 19849, Keid 
+ 21393, Theemin 
+ 21393, Theemini 
+ 20535, Beemim 
+ 20535, Theemim 
+ 20535, Theemin 
+ 20535, Beemim_II 
+ 13288, Angetenar 
+ 13288, Anchat 
+ 13288, An_Anchat_al_Nahr 
+ 21248, Beemim 
+ 21248, Beemim_III 
+ 16537, Ran 
+ 17378, Rana 
+ 21594, Sceptrum 
+ 23972, Kursi_al_Jauzah_II 
+ 14060, Aludhi_I 
+ 14168, Aludhi_II 
+ 14293, Aludhi_III 
+ 20042, Beemim_I 
+ 23364, Kursi_al_Jauzah_I 
+ 22491, Mouhoun 
+ 13993, Ayeyarwady 
+ 12961, Koeia 
+ 15474, Angetenar 
+# Fornax (For)
+ 14879, Dalim 
+ 14879, Fornacis 
+ 15578, Intan 
+# Gemini (Gem)
+ 36850, Castor 
+ 36850, Apollo 
+ 37826, Pollux 
+# TRANSLATORS: Added_context_to_avoid_conflict_with_constellation_name
+ 37826, Hercules [star] 
+ 31681, Alhena 
+ 31681, Almeisan 
+ 35550, Wasat 
+ 32246, Mebsuta 
+ 32246, Melucta 
+ 32246, Meboula 
+ 34088, Mekbuda 
+ 29655, Propus 
+ 29655, Tejat_Prior 
+ 29655, Praepes 
+ 30343, Tejat 
+ 30343, Tejat_Posterior 
+ 30343, Calx 
+ 32362, Alzirr 
+ 32362, Al_Zirr 
+ 30883, Nucatai 
+ 37265, Jishui 
+# Grus (Gru)
+109268, Alnair 
+109268, Al_Na'ir 
+109268, Al_Nair 
+108085, Aldhanab 
+108085, Al_Dhanab 
+108085, Deneb_Hut 
+112122, Tiaki 
+112122, Deneb_Alnahr 
+112122, Al_Dhanab 
+108375, Itonda 
+# Hercules (Her)
+ 84345, Rasalgethi 
+ 84345, Ras_Algethi 
+ 80816, Kornephoros 
+ 80816, Antilicus 
+ 80816, Rutilicus 
+ 79043, Marsic 
+ 79043, Marfik 
+ 85693, Maasym 
+ 85693, Masym 
+ 80463, Cujam 
+ 84379, Sarin 
+ 80838, Ogma 
+ 80170, Nasak_Shamiya_III 
+ 80076, Hunor 
+ 81693, Rutilicus 
+# Hydra (Hya)
+ 46390, Alphard 
+ 46390, Kalbelaphard 
+ 46390, Cor_Hydrae 
+ 46982, Ukdah_III 
+ 42313, Minazal_I 
+ 43109, Ashlesha 
+ 43109, Minazal_III 
+ 43813, Minazal_V 
+ 42799, Minazal_II 
+ 47431, Ukdah 
+ 47431, Ukdah_IV 
+ 47452, Al_Sharasif_I 
+ 43234, Minazal_IV 
+ 42402, Minchir 
+ 42402, Minkalshuja 
+ 42402, Al_Minliar_al_Shuja 
+ 46509, Ukdah_I 
+ 46776, Ukdah_II 
+ 48356, Zhang 
+ 48615, Felis 
+# Indus (Ind)
+101772, Persian 
+# Lacerta (Lac)
+112247, Babcock's_Star 
+# Leo (Leo)
+ 49669, Regulus 
+ 49669, Cor_Leonis 
+ 49669, Rex 
+ 49669, Kabeleced 
+ 49669, Al_Kalb_al_Asad 
+ 57632, Denebola 
+ 57632, Deneb_Aleet 
+ 50583, Algieba 
+ 50583, Al_Geiba 
+ 54872, Zosma 
+ 54872, Duhr 
+ 54872, Zubra 
+ 50335, Adhafera 
+ 50335, Aldhafera 
+ 54879, Chertan 
+ 54879, Al_Haratan 
+ 54879, Coxa 
+ 54879, Chort 
+ 46750, Alterf 
+ 48455, Rasalas 
+ 48455, Alshemali 
+ 48455, Ras_Elased_Borealis 
+ 48455, Rassalas 
+ 47508, Subra 
+ 47908, Algenubi 
+ 47908, Ras_Elased_Australis 
+ 47908, Ras_Elased 
+ 47908, Asad_Australis 
+ 46146, Al_Minlear_al_Asad 
+ 46146, Minkarasad 
+ 54951, Zubrah 
+ 49583, Al_Jabhah 
+ 49583, Chort 
+ 49583, Chertan 
+ 49583, Coxa 
+ 52123, Klemola's_Star 
+ 56508, Formosa 
+ 56572, Sagarmatha 
+ 55664, Moriah 
+ 54158, Dingolay 
+ 55642, Tsze_Tseang 
+# Leo_Minor (LMi)
+ 53229, Praecipua 
+# Lepus (Lep)
+ 25985, Arneb 
+ 25985, Arsh 
+ 25606, Nihal 
+ 23203, Hind's_Crimson_Star 
+ 27072, Kursi_al_Jabbar 
+ 27654, Arsh_al_Jauzah 
+ 47087, Illyrian 
+# Libra (Lib)
+ 72603, Zubenelgenubi_I 
+ 72603, Zubenelgenubi 
+ 72603, Zuben_Elgenubi 
+ 72603, Zuben_el_Genubi 
+ 72622, Zubenelgenubi_II 
+ 72622, Zubenelgenubi 
+ 74785, Zubeneschamali 
+ 74785, Zuben_Eschamali 
+ 74785, Zuben_Elschemali 
+ 74785, Zubenelchemale 
+ 73714, Brachium 
+ 73714, Zuben_Acrabi 
+ 73714, Cornu 
+ 73714, Zubenalgubi 
+ 73473, Zuben_Elakribi 
+ 73473, Mulu-Lizi 
+ 76333, Zubenelhakrabi 
+ 76333, Zuben_Elakrab 
+ 76333, Zuben_Elakribi 
+ 73945, Zuben_Hakrabi 
+# Lupus (Lup)
+ 71680, Men 
+ 73273, KeKouan 
+# Lynx (Lyn)
+ 41075, Alsciaukat 
+ 41075, Mabsuthat 
+ 41075, Shaukah 
+ 33485, Dolones_X 
+ 43674, Stribor 
+# Lyra (Lyr)
+ 91262, Vega 
+ 91262, Fidis 
+ 91262, Harp_star 
+ 92420, Sheliak 
+ 93194, Sulafat 
+ 93194, Jugum 
+ 93194, Sulaphat 
+ 94481, Aladfar 
+ 90191, Al_Athfar 
+ 91919, Double_Double_I 
+ 91926, Double_Double_II 
+ 91971, Nasr_Alwaki_I 
+ 91973, Nasr_Alwaki_II 
+ 91852, Xihe 
+# Mensa (Men)
+ 26380, Bubup 
+# Monoceros (Mon)
+ 31646, Plaskett's_Star 
+ 30089, Red_Rectangle 
+ 33719, Citalá 
+ 30905, Lusitânia 
+# Octanus (Oct)
+104382, Polaris_Australis 
+# Ophiuchus (Oph)
+ 86032, Rasalhague 
+ 86032, Ras_Alhague 
+ 86742, Cebalrai 
+ 86742, Kelb_Alrai 
+ 86742, Cheleb 
+ 79593, Yed_Prior 
+ 79882, Yed_Posterior 
+ 79822, Yed_Post 
+ 84012, Sabik 
+ 80883, Marfik 
+ 87108, Muliphen 
+ 87937, Barnard's_Star 
+ 87937, Velox_Barnardi 
+ 81377, Saik 
+ 81377, Han 
+ 84970, Garafsa 
+ 84893, Aggia 
+ 86777, Iron_Star 
+ 84405, Guniibuu 
+ 82651, Mahsati 
+ 80687, Timir 
+ 81022, Rosalíadecastro 
+# Orion (Ori)
+ 27989, Betelgeuse 
+ 27989, Al_Mankib 
+ 27989, Betelgeux 
+ 27989, Martial_Star 
+ 27989, Mirzam 
+ 24436, Rigel 
+ 24436, Algebar 
+ 25336, Bellatrix 
+ 25336, Amazon_Star 
+ 25930, Mintaka 
+ 26311, Alnilam 
+ 26727, Alnitak 
+ 27366, Saiph 
+ 26207, Meissa 
+ 26207, Heka 
+ 26241, Hatysa 
+ 26241, Nair_al_Saif 
+ 25923, Thabit 
+ 22449, Tabit 
+ 26237, Mizan_Batil_I 
+ 26563, Mizan_Batil_III 
+ 22833, Manica 
+ 25281, Saif_al_Jabbar 
+ 25281, Algjebbah 
+ 26220, Trapezium 
+ 26235, Mizan_Batil_II 
+ 22667, Al_Kumm_I 
+ 22957, Al_Kumm_II 
+ 22845, Al_Taj_IV 
+ 22845, Tabit 
+ 22509, Al_Taj_I 
+ 22549, Al_Taj_II 
+ 22797, Al_Taj_III 
+ 23123, Al_Taj_V 
+ 26176, Heka 
+ 26221, Becklin's_Star 
+# Pavo (Pav)
+100751, Peacock 
+# Pegasus (Peg)
+113963, Markab 
+113963, Yed_Alpheras 
+113963, Marchab 
+113881, Scheat 
+113881, Seat_Alpheras 
+  1067, Algenib 
+107315, Enif 
+107315, Os_Pegasi 
+107315, Fom 
+107315, Fumalfaras 
+112029, Homam 
+112029, Al_Hammam 
+112029, Homan 
+112158, Matar 
+109427, Biham 
+112748, Sadalbari 
+112748, Sa'd_al_Bari' 
+115250, Salm 
+115250, Al_Karab 
+115250, Salma 
+113357, Helvetios 
+112440, Sadalnazi 
+109068, Fum_al_Faras 
+112447, Suudalnujum 
+112051, Sadalmatar 
+115623, Alkarab 
+# Perseus (Per)
+ 15863, Mirfak 
+ 15863, Algenib 
+ 15863, Marfak 
+ 15863, Alchemb 
+ 15863, Mirphak 
+ 14576, Algol 
+ 14576, Gorgonea_Prima 
+ 14576, Gorgona 
+ 18614, Menkib 
+ 17448, Atik 
+ 17448, Ati 
+ 17448, Alatik 
+ 18246, Atik 
+ 18246, Menkhib 
+ 13879, Gorgonea_Secunda 
+ 14354, Gorgonea_Tertia 
+ 14354, Gorgonea_Terti 
+ 14817, Gorgonea_Quarta 
+ 13268, Miram 
+ 14668, Misam 
+ 10729, Misam_al_Thurayya_I 
+ 22365, Bidelman's_Peculiar_Star 
+ 13531, Kerb 
+# Phoenix (Phe)
+  2081, Ankaa 
+  2081, Nair_al_Zaurak 
+  5165, Alrial_III 
+  6867, Alrial_V 
+  2071, Alrial_I 
+  3245, Alrial_II 
+  5862, Alrial_IV 
+  5348, Wurren 
+  5054, Nenque 
+# Pictor (Pic)
+ 24186, Kapteyn's_Star 
+# Pisces (Psc)
+  9487, Alrescha 
+  9487, Al_Rescha 
+  9487, Alrischa 
+  9487, Alrisha 
+  9487, Okda 
+  9487, Kaitain 
+  9487, Al_Rischa 
+  3829, van_Maanen's_Star 
+  3829, van_Maanen 2 
+  8198, Torcular 
+  8198, Torcularis_Septentrionalis 
+  7097, Alpherg 
+  7097, Kullat_Nunu 
+113889, Fumalsamakah 
+113889, Fum_al_Samakah 
+  3786, Kuton_I 
+  5737, Revati 
+  5737, Kuton_II 
+  5743, Kuton_III 
+  6643, Bélénos 
+  1547, Citadelle 
+114322, Ebla 
+# Piscis_Austrinus (PsA)
+113368, Fomalhaut 
+113368, Thalim 
+113368, Os_Piscis_Meridiani 
+113368, Os_Piscis_Notii 
+111188, Fum_al_Hui 
+106824, Sāmaya 
+# Puppis (Pup)
+ 39429, Naos 
+ 39429, Suhail_Hadar 
+ 39757, Tureis 
+ 35488, Bernes 135 
+ 38170, Azmidi 
+ 38170, Asmidiske 
+ 38170, Azmidiske 
+ 31895, Nosaxa 
+# Reticulum (Ret)
+ 17096, Tupi 
+# Sagitta (Sge)
+ 96757, Sham 
+ 96078, Uruk 
+# Sagittarius (Sgr)
+ 95347, Rukbat 
+ 95347, Alrami 
+ 95241, Arkab_Prior 
+ 95241, Arkab 
+ 95294, Arkab_Posterior 
+ 88635, Alnasl 
+ 88635, Nushaba 
+ 88635, Al_Nasl 
+ 88635, Nash 
+ 88635, El_Nasl 
+ 88635, Alnasr 
+ 89931, Kaus_Media 
+ 89931, Kaus_Meridionalis 
+ 89931, Media 
+ 89931, Kaus_Medius 
+ 90185, Kaus_Australis 
+ 93506, Ascella 
+ 90496, Kaus_Borealis 
+ 90496, Al_Thalimain 
+ 92855, Nunki 
+ 92855, Sadira 
+ 89341, Polis 
+ 89341, Al_Thalimain 
+ 89341, Alnam 
+ 94141, Albaldah 
+ 94141, Al_Baldah 
+ 98066, Terebellum 
+ 98066, Terebellum_I 
+ 98162, Terebellum_II 
+ 98353, Terebellum_III 
+ 98688, Terebellum_IV 
+ 89642, Hamalwarid 
+ 89642, Arkab 
+ 92761, Ainalrami 
+ 92761, Ain_al_Rami_I 
+ 92845, Ain_al_Rami_II 
+ 93864, Namalsadirah_II 
+ 92041, Namalsadirah_I 
+ 95477, Namalsadirah_III 
+ 95503, Namalsadirah_IV 
+ 94643, Al_Kiladah 
+ 94645, Gumala 
+ 88414, Pincoya 
+ 95262, Sika 
+ 95124, Belel 
+# Scorpius (Sco)
+ 80763, Antares 
+ 80763, Cor_Scorpii 
+ 80763, Vespertilio 
+ 80763, Kalb_al_Akrab 
+ 78820, Acrab 
+ 78820, Graffias 
+ 78820, Akrab 
+ 78401, Dschubba 
+ 78401, Iclarkrau 
+ 86228, Sargas 
+ 86228, Girtab 
+ 85927, Shaula 
+ 80112, Alniyat 
+ 80112, Alniyat_I 
+ 80112, Al_Niyat 
+ 81266, Paikauhale 
+ 81266, Alniyat_II 
+ 81266, Al_Niyat 
+ 85696, Lesath 
+ 85696, Lesuth 
+ 79374, Jabbah 
+ 78727, Grafias 
+ 78727, Grassias 
+ 87073, Girtab 
+ 87294, Vanant 
+ 86670, Mula 
+ 86670, Girtab 
+ 82514, Xamidimura 
+ 82514, Tali_al_Shaulah_I 
+ 82545, Pipirima 
+ 82545, Tali_al_Shaulah_II 
+ 78265, Fang 
+ 78265, Nur 
+ 78104, Iklil 
+ 78104, Iolil 
+ 78933, Jabhat_Acrabi_I 
+ 78933, Jabhat_al_Akrab 
+ 78990, Jabhat_Acrabi_II 
+ 87261, Fuyue 
+ 82396, Larawag 
+ 82396, Wei 
+ 83547, Rapeto 
+ 79431, Sharjah 
+# Sculptor (Scl)
+  3479, Cocibolca 
+# Serpens (Ser)
+ 77070, Unukalhai 
+ 77070, Cor_Serpentis 
+ 77070, Unuk_al_Hay 
+ 77070, Unuk_Elhaia 
+ 92946, Alya 
+ 77233, Chow 
+ 77233, Nasak_Shamiya_I 
+ 78072, Nasak_Shamiya_II 
+ 76276, Nasak_Yamani_I 
+ 76276, Tsin 
+ 77622, Nasak_Yamani_II 
+ 92037, Tweedledee_and_Tweedledum 
+ 77450, Gudja 
+ 90004, Alasia 
+ 92895, Kaveh 
+ 89962, Alava 
+# Sextans (Sex)
+ 48711, Bibhā 
+# Taurus (Tau)
+ 21421, Aldebaran 
+ 21421, Cor_Tauri 
+ 21421, Parilicium 
+ 25428, Elnath 
+ 25428, El_Nath 
+ 25428, Nath 
+ 25428, Al_Nath 
+ 20889, Ain 
+ 20889, Oculus_Boreus 
+ 17702, Alcyone 
+ 17489, Celaeno 
+ 17499, Electra 
+ 17531, Taygeta 
+ 17573, Maia 
+ 17579, Asterope 
+ 17579, Sterope_I 
+ 17608, Merope 
+ 17847, Atlas 
+ 17851, Pleione 
+ 20205, Prima_Hyadum 
+ 20205, Hyadum_I 
+ 20205, Hyadum_Primus 
+ 20455, Secunda_Hyadum 
+ 20455, Hyadum_II 
+ 25945, The_Ruby_Star 
+ 17588, Sterope_II 
+ 20885, Hyadum_III 
+ 20894, Chamukuy 
+ 20894, Hyadum_IV 
+ 20635, Alkalbain_III 
+ 20641, Alkalbain_IV 
+ 20711, Alkalbain_V 
+ 20250, Alkalbain_I 
+ 20430, Alkalbain_II 
+ 26451, Tianguan 
+ 26451, Alheka 
+ 21109, Hoggar 
+# Triangulum (Tri)
+  8796, Mothallah 
+  8796, Caput_Trianguli 
+  8796, Methallah 
+  8796, Atria 
+  8796, Rasalmudallah 
+  8796, Rasalmothallah 
+ 10064, Mizan 
+# Triangulum_Australe (TrA)
+ 82273, Atria 
+# Tucana (Tuc)
+116084, Poerava 
+  5529, Emiw 
+# Ursa_Major (UMa)
+ 54061, Dubhe 
+ 54061, Dubb 
+ 54061, Ak 
+ 54061, Dubh 
+ 53910, Merak 
+ 53910, Mirak 
+ 58001, Phecda 
+ 58001, Phad 
+ 58001, Phekda 
+ 59774, Megrez 
+ 59774, Kaffa 
+ 62956, Alioth 
+ 62956, Aliath 
+ 65378, Mizar 
+ 65378, Alcor 
+ 67301, Alkaid 
+ 67301, Benetnasch 
+ 44127, Talitha 
+ 44127, Talita 
+ 44127, Dnoces 
+ 50372, Tania_Borealis 
+ 50801, Tania_Australis 
+ 55219, Alula_Borealis 
+ 55203, Alula_Australis 
+ 41704, Muscida 
+ 65477, Alcor 
+ 57939, Groombridge 1830 
+ 57939, Flying_Star 
+ 57939, Runaway_Star 
+ 57939, Argelander's_Star 
+ 46471, Intercrus 
+ 53721, Chalawan 
+ 57399, Taiyangshou 
+ 57399, Al_Kaphrah 
+ 57399, Alkafzah 
+ 42080, Althiba_I 
+ 46977, Althiba_VII 
+ 45493, Alhaud_III 
+ 44901, Alhaud_I 
+ 46733, Alhaud_IV 
+ 46853, Alhaud_V 
+ 44471, Alkaphrah 
+ 44471, Kafzatania 
+ 44471, Al_Kaprah 
+ 44471, Talitha_Australis 
+ 42438, Althiba_II 
+ 42527, Althiba_III 
+ 42527, Museida 
+ 44390, Althiba_IV 
+ 44857, Althiba_V 
+ 45038, Althiba_VI 
+ 45075, Alhaud_II 
+ 48319, Alhaud_VI 
+ 48402, Alhaud_VII 
+ 54035, Lalande 21185 
+ 66192, Liesma 
+ 40687, Násti 
+ 73136, Baekdu 
+ 57820, Aniara 
+# Ursa_Minor (UMi)
+ 11767, Polaris 
+ 11767, Alrucaba 
+ 11767, Cinosura 
+ 11767, Cynosura 
+ 11767, Tramontana 
+ 11767, Yilduz 
+ 11767, Mismar 
+ 11767, Star_of_Arcady 
+ 72607, Kochab 
+ 72607, Kocab 
+ 75097, Pherkad 
+ 75097, Pherkad_Major 
+ 74793, Pherkad_Minor 
+ 85822, Yildun 
+ 85822, Vildiur 
+ 85822, Pherkard 
+ 82080, Circitores 
+ 77055, Akfa_Farkadain 
+ 79822, Anwa_Farkadain 
+# Vela (Vel)
+ 39953, Regor 
+ 39953, Suhail_al_Muhlif 
+ 39953, Suhail 
+ 45941, Markeb 
+ 45941, Markab 
+ 44816, Suhail 
+ 44816, Al_Suhail_al_Wazn 
+ 44816, Alsuhail 
+ 42913, Alsephina 
+ 42913, Koo_She 
+ 47202, Kalausi 
+ 48235, Natasha 
+# Virgo (Vir)
+ 65474, Spica 
+ 65474, Azimech 
+ 65474, Alaraph 
+ 57757, Zavijava 
+ 57757, Minelauva 
+ 57757, Zavijah 
+ 57757, Alaraph 
+ 61941, Porrima 
+ 61941, Antevorta 
+ 61941, Arich 
+ 63608, Vindemiatrix 
+ 63608, Almuredin 
+ 63608, Provindemiator 
+ 63608, Protrigetrix 
+ 63608, Alaraph 
+ 60129, Zaniah 
+ 69701, Syrma 
+ 61941, Arich 
+ 66249, Heze 
+ 63090, Minelauva 
+ 63090, Auva 
+ 69974, Khambaliya 
+ 69974, Kambalia 
+ 71957, Rijl_al_Awwa 
+ 71957, Rigilawwa 
+ 69427, Kang 
+ 69427, Algafar_I 
+ 70755, Elgafar 
+ 70755, Algafar_II 
+ 57370, Flegetonte 
+ 72339, Mönch 
+# Vulpecula (Vul)
+ 95771, Anser 
