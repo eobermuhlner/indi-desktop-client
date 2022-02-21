@@ -1,7 +1,11 @@
 package ch.obermuhlner.indi.client
 
 import ch.obermuhlner.kotlin.javafx.*
+import ch.obermuhlner.math.clamp
+import ch.obermuhlner.math.wrap
 import ch.obermuhlner.starmap.data.StarData
+import ch.obermuhlner.starmap.javafx.StarCanvas
+import ch.obermuhlner.starmap.projection.EquatorialStereographicProjection
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.*
@@ -38,10 +42,13 @@ class IndiClientApplication : Application() {
     private var connection: INDIServerConnection? = null
     private var devicesTabPane = tabpane {}
     private val mapDeviceToUserInterface = mutableMapOf<INDIDevice, GridPaneContext>()
-    private val starMapCanvas = ResizableCanvas()
+
     private val hipparcosStars = StarData.readStars(File("hip.jbin"))
     private val constellations = StarData.readConstellations(hipparcosStars, File("constellations_western.txt"))
     private val starNames = StarData.readStarNames(hipparcosStars, File("star_names_western.txt"))
+
+    //private val starMapCanvas = ResizableCanvas()
+    private val starMapCanvas = StarCanvas(hipparcosStars, constellations, starNames, EquatorialStereographicProjection())
 
     private val centerRaProperty = SimpleDoubleProperty(0.0)
     private val centerDeProperty = SimpleDoubleProperty(0.0)
@@ -90,25 +97,29 @@ class IndiClientApplication : Application() {
                 starMapCanvas.onMousePressed = EventHandler { event: MouseEvent ->
                     val x = event.x - starMapCanvas.width / 2
                     val y = (starMapCanvas.height - event.y) - starMapCanvas.height / 2
-                    val (ra2, de2) = stereographicProjectionToRaDe(x, y, projectionRadiusProperty.value)
-                    val ra = centerRaProperty.value + ra2
-                    val de = centerDeProperty.value + de2
+                    val (ra2, de2) = toRaDe(x, y)
+                    val raLast = centerRaProperty.value
+                    val deLast = centerDeProperty.value
+                    val ra = raLast + ra2
+                    val de = deLast + de2
                     startRa = ra
                     startDe = de
                 }
                 starMapCanvas.onMouseDragged = EventHandler { event: MouseEvent ->
                     val x = event.x - starMapCanvas.width / 2
                     val y = (starMapCanvas.height - event.y) - starMapCanvas.height / 2
-                    val (ra2, de2) = stereographicProjectionToRaDe(x, y, projectionRadiusProperty.value)
-                    val ra = centerRaProperty.value + ra2
-                    val de = centerDeProperty.value + de2
+                    val (ra2, de2) = toRaDe(x, y)
+                    val raLast = centerRaProperty.value
+                    val deLast = centerDeProperty.value
+                    val ra = raLast + ra2
+                    val de = deLast + de2
                     val localStartRa = startRa
                     val localStartDe = startDe
                     if (localStartRa != null && localStartDe != null) {
                         val deltaRa = localStartRa - ra
                         val deltaDe = localStartDe - de
-                        centerRaProperty.value = wrap(centerRaProperty.value + deltaRa, 0.0, 2 * Math.PI)
-                        centerDeProperty.value = clamp(centerDeProperty.value + deltaDe, -Math.PI, Math.PI)
+                        centerRaProperty.value = wrap(raLast + deltaRa, 0.0, 2 * Math.PI)
+                        centerDeProperty.value = clamp(deLast + deltaDe, -Math.PI, Math.PI)
                     } else {
                         startRa = ra
                         startDe = de
@@ -124,155 +135,32 @@ class IndiClientApplication : Application() {
                     projectionRadiusProperty.value = min(20000.0, max(200.0, projectionRadiusProperty.value * factor))
                 }
 
-                starMapCanvas.widthProperty().addListener { _, _, _ -> drawStars(starMapCanvas) }
-                starMapCanvas.heightProperty().addListener { _, _, _ -> drawStars(starMapCanvas) }
+                starMapCanvas.widthProperty().addListener { _, _, _ -> drawStars() }
+                starMapCanvas.heightProperty().addListener { _, _, _ -> drawStars() }
 
-                centerRaProperty.addListener { _, _, _ -> drawStars(starMapCanvas) }
-                centerDeProperty.addListener { _, _, _ -> drawStars(starMapCanvas) }
-                projectionRadiusProperty.addListener { _, _, _ -> drawStars(starMapCanvas) }
-                drawStars(starMapCanvas)
+                centerRaProperty.addListener { _, _, _ -> drawStars() }
+                centerDeProperty.addListener { _, _, _ -> drawStars() }
+                projectionRadiusProperty.addListener { _, _, _ -> drawStars() }
+                drawStars()
             }
 
             children += devicesTabPane
         }
     }
 
-    private fun wrap(value: Double, min: Double, max: Double): Double {
-        return if (value > max) {
-            value - max
-        } else if (value < min) {
-            value + min
-        } else {
-            value
-        }
+    private fun toRaDe(x: Double, y: Double): Pair<Double, Double> {
+        return starMapCanvas.projection.toRaDe(x, y, centerRaProperty.value, centerDeProperty.value, projectionRadiusProperty.value)
     }
 
-    private fun clamp(value: Double, min: Double, max: Double): Double {
-        return if (value < min) {
-            min
-        } else if (value > max) {
-            max
-        } else {
-            value
-        }
+    private fun toXY(ra: Double, de: Double): Pair<Double, Double> {
+        return starMapCanvas.projection.toXY(ra, de, centerRaProperty.value, centerDeProperty.value, projectionRadiusProperty.value)
     }
 
-    private fun drawStars(canvas: Canvas) {
-        drawStars(canvas, centerRaProperty.value, centerDeProperty.value, projectionRadiusProperty.value)
-    }
-
-    private fun drawStars(canvas: Canvas, centerRa: Double, centerDe: Double, projectionRadius: Double, limitMagnitude: Double = Math.log10(projectionRadius)+3.0, labelDarkestMagnitude: Double = limitMagnitude+2.0, labelMinProjectionRadius: Double = 1000.0) {
-        val gc = canvas.graphicsContext2D
-        val width = canvas.width
-        val height = canvas.height
-
-        fun toX(x: Double) = x + width/2
-        fun toY(y: Double) = height - (y + height/2)
-
-        gc.fill = Color.BLACK
-        gc.fillRect(0.0, 0.0, width, height)
-
-        gc.stroke = Color.BLUE
-        for (constellation in constellations) {
-            for (starPair in constellation.value) {
-                val (x1, y1) = stereographicProjectionToXY(
-                    starPair.first.ra-centerRa,
-                    starPair.first.de-centerDe,
-                    projectionRadius)
-                val (x2, y2) = stereographicProjectionToXY(
-                    starPair.second.ra-centerRa,
-                    starPair.second.de-centerDe,
-                    projectionRadius)
-                gc.strokeLine(toX(x1), toY(y1), toX(x2), toY(y2))
-            }
-        }
-
-        gc.fill = Color.WHITE
-        for (star in hipparcosStars) {
-            if (star != null) {
-                val (xx, yy) = stereographicProjectionToXY(
-                    star.ra-centerRa,
-                    star.de-centerDe,
-                    projectionRadius
-                )
-
-                val x = toX(xx)
-                val y = toY(yy)
-
-                if (x > 0 && x < width && y > 0 && y < height) {
-                    val radius = -star.magnitude + limitMagnitude
-                    if (radius > 0) {
-                        gc.fillOval(x - radius / 2, y - radius / 2, radius, radius)
-                        if (projectionRadius > labelMinProjectionRadius /*&& star.magnitude < labelDarkestMagnitude*/) {
-                            //gc.strokeText(star.magnitude.toString(), x, y)
-                            val name = starNames[star]
-                            if (name != null) {
-                                gc.strokeText(name, x, y)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // https://mathworld.wolfram.com/StereographicProjection.html
-    private fun stereographicProjectionToXY(
-        ra: Double,
-        de: Double,
-        radius: Double,
-    ): Pair<Double, Double> {
-        val sinDe = sin(de)
-        val cosDe = cos(de)
-        val k = 2 * radius / (1 + cosDe*cos(ra))
-        val x = k * cosDe * sin(ra)
-        val y = k * (sinDe)
-        return Pair(x, y)
-    }
-
-    private fun stereographicProjectionToXY(
-        ra: Double,
-        de: Double,
-        projectionCenterRa: Double,
-        projectionCenterDe: Double,
-        radius: Double,
-        cosProjectionCenterDe: Double = cos(projectionCenterDe),
-        sinProjectionCenterDe: Double = sin(projectionCenterDe)
-    ): Pair<Double, Double> {
-        val sinDe = sin(de)
-        val cosDe = cos(de)
-        val k = 2 * radius / (1 + sinProjectionCenterDe *sinDe + cosProjectionCenterDe *cosDe*cos(ra - projectionCenterRa))
-        val x = k * cosDe * sin(ra - projectionCenterRa)
-        val y = k * (cosProjectionCenterDe * sinDe + sinProjectionCenterDe * cosDe * cos(ra - projectionCenterRa))
-        return Pair(x, y)
-    }
-
-    private fun stereographicProjectionToRaDe(
-        x: Double,
-        y: Double,
-        radius: Double,
-    ): Pair<Double, Double> {
-        val r = sqrt(x*x + y*y)
-        var c = 2 * atan2(r, 2*radius)
-        val de = asin((y * sin(c)) / r )
-        val ra = atan2(x * sin(c), r * cos(c))
-        return Pair(ra, de)
-    }
-
-    private fun stereographicProjectionToRaDe(
-        x: Double,
-        y: Double,
-        centerRa: Double,
-        centerDe: Double,
-        radius: Double,
-        sinCenterDe: Double = sin(centerDe),
-        cosCenterDe: Double = cos(centerDe)
-    ): Pair<Double, Double> {
-        val r = sqrt(x*x + y*y)
-        var c = 2 * atan2(r, 2*radius)
-        val de = asin(cos(c) * sinCenterDe + (y * sin(c) * cosCenterDe) / r )
-        val ra = centerRa + atan2(x * sin(c), r * cosCenterDe * cos(c) - y * sinCenterDe * sin(c))
-        return Pair(ra, de)
+    private fun drawStars() {
+        starMapCanvas.ra0 = centerRaProperty.value
+        starMapCanvas.de0 = centerDeProperty.value
+        starMapCanvas.zoomFactor = projectionRadiusProperty.value
+        starMapCanvas.draw()
     }
 
     private fun connectIndi(host: String, port: Int = 7624) {

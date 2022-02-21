@@ -3,7 +3,7 @@ package ch.obermuhlner.kotlin.javafx
 import javafx.scene.canvas.Canvas
 
 
-class ResizableCanvas : Canvas(100.0, 100.0) {
+open class ResizableCanvas : Canvas(100.0, 100.0) {
 
     override fun isResizable(): Boolean {
         return true
