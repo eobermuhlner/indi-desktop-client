@@ -15,7 +15,7 @@ application {
 }
 
 javafx {
-    modules("javafx.controls")
+    modules("javafx.controls", "javafx.web")
 }
 
 repositories {
