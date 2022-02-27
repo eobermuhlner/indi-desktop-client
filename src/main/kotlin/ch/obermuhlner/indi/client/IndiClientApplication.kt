@@ -12,7 +12,6 @@ import javafx.beans.property.*
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
-import javafx.scene.canvas.Canvas
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.WritableImage
@@ -21,6 +20,7 @@ import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
+import javafx.scene.web.WebView
 import javafx.stage.Stage
 import nom.tam.fits.BasicHDU
 import nom.tam.fits.Fits
@@ -42,6 +42,8 @@ class IndiClientApplication : Application() {
     private var connection: INDIServerConnection? = null
     private var devicesTabPane = tabpane {}
     private val mapDeviceToUserInterface = mutableMapOf<INDIDevice, GridPaneContext>()
+    private val deviceManagerWebview = WebView()
+
 
     private val hipparcosStars = StarData.readStars(File("hip.jbin"))
     private val constellations = StarData.readConstellations(hipparcosStars, File("constellations_western.txt"))
@@ -76,6 +78,7 @@ class IndiClientApplication : Application() {
     private fun createMainNode(): Node {
         val hostProperty = SimpleStringProperty("192.168.0.223")
         val portProperty = SimpleIntegerProperty(7624)
+        val devicePortProperty = SimpleIntegerProperty(8624)
         return vbox(SPACING) {
             children += hbox(SPACING) {
                 children += label("Host:")
@@ -83,8 +86,11 @@ class IndiClientApplication : Application() {
                 }
                 children += textfield(portProperty) {
                 }
+                children += textfield(devicePortProperty) {
+                }
                 children += button("Connect") {
                     onAction = EventHandler {
+                        deviceManagerWebview.engine.load("http://${hostProperty.value}:${devicePortProperty.value}/")
                         connectIndi(hostProperty.get(), portProperty.get())
                     }
                 }
@@ -142,6 +148,10 @@ class IndiClientApplication : Application() {
                 centerDeProperty.addListener { _, _, _ -> drawStars() }
                 projectionRadiusProperty.addListener { _, _, _ -> drawStars() }
                 drawStars()
+            }
+
+            devicesTabPane.tabs += tab("Device Manager") {
+                content = deviceManagerWebview
             }
 
             children += devicesTabPane
@@ -208,11 +218,17 @@ class IndiClientApplication : Application() {
 
             override fun removeProperty(device: INDIDevice, property: INDIProperty<*>) {
                 val gridPaneContext = mapDeviceToUserInterface[device]!!
-                // TODO remove rows
+                Platform.runLater {
+                    gridPaneContext.children
+                        .filter { it.userData == property }
+                        .forEach {
+                            gridPaneContext.children.remove(it)
+                        }
+                }
             }
 
             override fun messageChanged(device: INDIDevice) {
-                lastMessageProperty.value = device.lastMessage
+                lastMessageProperty.value += device.lastMessage + "\n"
             }
         })
 
@@ -229,8 +245,9 @@ class IndiClientApplication : Application() {
                             children += deviceGridPane
                         }
                     }
-                    bottom = textfield(lastMessageProperty) {
-                        isDisable = true
+                    bottom = textarea(lastMessageProperty) {
+                        minHeight = 150.0
+                        isEditable = false
                     }
                 }
             }
@@ -269,24 +286,38 @@ class IndiClientApplication : Application() {
             val editable = property.permission != Constants.PropertyPermissions.RO
             gridPaneContext.row {
                 cell {
-                    label("")
+                    label("") {
+                        userData = property
+                    }
                 }
                 cell {
-                    label(element.label)
+                    label(element.label) {
+                        userData = property
+                    }
                 }
                 cell {
-                    textfield(stringProperty) {
-                        isDisable = true
+                    tooltipWrapper(
+                        textfield(stringProperty) {
+                            isDisable = true
+                        },
+                        tooltip("""
+                            ${element.label}
+                            ${element.min} - ${element.max}
+                            """.trimIndent())
+                    ) {
+                        userData = property
                     }
                 }
                 if (editable) {
                     cell {
                         textfield(editStringProperty) {
+                            userData = property
                         }
                     }
                     if (element == property.elementsAsList[0]) {
                         cell(rowspan = property.elementsAsList.size) {
                             button("Set") {
+                                userData = property
                                 setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE)
                                 onAction = EventHandler {
                                     updateEditedElements()                            }
@@ -320,24 +351,35 @@ class IndiClientApplication : Application() {
             elementToEditStringProperties[element] = editStringProperty
             gridPaneContext.row {
                 cell {
-                    label("")
+                    label("") {
+                        userData = property
+                    }
                 }
                 cell {
-                    label(element.label)
+                    label(element.label) {
+                        userData = property
+                    }
                 }
                 cell {
-                    textfield(stringProperty) {
-                        isDisable = true
+                    tooltipWrapper(
+                        textfield(stringProperty) {
+                            isDisable = true
+                        },
+                        tooltip(stringProperty)
+                    ) {
+                        userData = property
                     }
                 }
                 if (editable) {
                     cell {
                         textfield(editStringProperty) {
+                            userData = property
                         }
                     }
                     if (element == property.elementsAsList[0]) {
                         cell(rowspan = property.elementsAsList.size) {
                             button("Set") {
+                                userData = property
                                 setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE)
                                 onAction = EventHandler {
                                     updateEditedElements()                            }
@@ -357,10 +399,13 @@ class IndiClientApplication : Application() {
 
         gridPaneContext.row {
             cell {
-                label("")
+                label("") {
+                    userData = property
+                }
             }
             cell(colspan = 3) {
                 flowpane(SPACING) {
+                    userData = property
                     for (element in property.elementsAsList) {
                         val booleanProperty = SimpleBooleanProperty(element.value == Constants.SwitchStatus.ON)
                         val infoProperty = SimpleStringProperty(element.nameAndValueAsString)
@@ -411,13 +456,18 @@ class IndiClientApplication : Application() {
             val imageProperty = SimpleObjectProperty<Image>()
             gridPaneContext.row {
                 cell {
-                    label("")
+                    label("") {
+                        userData = property
+                    }
                 }
                 cell {
-                    label(element.label)
+                    label(element.label) {
+                        userData = property
+                    }
                 }
                 cell(colspan = 2) {
                     vbox {
+                        userData = property
                         children += textfield(blobProperty) {
                             isDisable = true
                         }
@@ -459,7 +509,9 @@ class IndiClientApplication : Application() {
         }
     }
 
-    private fun fitsToFXImage(data: ByteArray?): Image? {
+    private fun fitsToFXImage(
+        data: ByteArray?,
+        valueFunc: (Double) -> Double = { v -> v.pow(1.0 / 5.0) }): Image? {
         val fits = Fits(ByteArrayInputStream(data))
         val hdu = fits.getHDU(0)
         if (hdu is ImageHDU) {
@@ -470,6 +522,8 @@ class IndiClientApplication : Application() {
 
                     val wr = WritableImage(width, height)
                     val pw = wr.pixelWriter
+                    var minValue = Double.MAX_VALUE
+                    var maxValue = 0.0
 
                     when (hdu.bitPix) {
                         BasicHDU.BITPIX_SHORT -> {
@@ -477,12 +531,16 @@ class IndiClientApplication : Application() {
                             for (y in 0 until height) {
                                 for (x in 0 until width) {
                                     val value = scaleFitsValue(kernel[y][x].toDouble(), hdu)
-                                    val argb = toARGB(value, value, value)
+                                    minValue = min(value, minValue)
+                                    maxValue = max(value, maxValue)
+                                    val stretchedValue = valueFunc(value)
+                                    val argb = toARGB(stretchedValue, stretchedValue, stretchedValue)
                                     pw.setArgb(x, y, argb)
                                 }
                             }
                         }
                     }
+                    println("IMAGE min=$minValue max=$maxValue")
                     return ImageView(wr).image
                 }
                 3 -> {
@@ -550,10 +608,12 @@ class IndiClientApplication : Application() {
         gridPaneContext.row {
             cell {
                 stateLight(stateProperty) {
+                    userData = property
                     fill = toColor(property.state)
                 }            }
             cell(colspan = 3) {
                 label(property.label) {
+                    userData = property
                     tooltip = tooltip(infoProperty)
                 }
             }
