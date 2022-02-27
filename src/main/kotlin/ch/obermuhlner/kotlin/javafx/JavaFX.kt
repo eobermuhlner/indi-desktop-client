@@ -87,6 +87,19 @@ fun label(textProperty: StringProperty, initializer: Label.() -> Unit): Label {
     return field
 }
 
+fun tooltipWrapper(node: Node, tooltip: Tooltip): Control
+    = tooltipWrapper(node, tooltip) {}
+
+fun tooltipWrapper(node: Node, tooltip: Tooltip, initializer: SplitPane.() -> Unit): Control {
+    val pane = SplitPane(node)
+    pane.tooltip = tooltip
+    pane.apply(initializer)
+    return pane
+}
+
+fun tooltip(text: String)
+        = Tooltip(text)
+
 fun tooltip(initializer: Tooltip.() -> Unit)
         = Tooltip().apply(initializer)
 
@@ -180,6 +193,12 @@ fun textfield(integerProperty: IntegerProperty, format: Format = INTEGER_FORMAT,
 
 fun textarea(initializer: TextArea.() -> Unit)
         = TextArea().apply(initializer)
+
+fun textarea(textProperty: StringProperty, initializer: TextArea.() -> Unit): TextArea {
+    val field = textarea(initializer)
+    field.textProperty().bindBidirectional(textProperty)
+    return field
+}
 
 fun textFormatter(defaultValue: Int?, min: Int? = null, max: Int? = null): TextFormatter<Int> {
     val converter = IntegerStringConverter()
